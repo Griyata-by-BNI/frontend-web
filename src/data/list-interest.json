@@ -1,0 +1,286 @@
+{
+  "rateTypes": [
+    { "id": "A", "label": "Properti Baru (Top Developer)" },
+    { "id": "B", "label": "Properti Baru (Developer Rekanan)" },
+    { "id": "C", "label": "Non-Primary" },
+    { "id": "D", "label": "Multiguna / Refinancing" }
+  ],
+  "singleFixed": [
+    {
+      "fixedPeriod": "Fixed 1 Tahun",
+      "minTenor": "3 Tahun",
+      "rates": {
+        "A": "2.75%",
+        "B": "3.25%",
+        "C": "3.75%",
+        "D": "4.75%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 2 Tahun",
+      "minTenor": "1 Tahun",
+      "rates": {
+        "A": "7.75%",
+        "B": "8.00%",
+        "C": "8.50%",
+        "D": "9.25%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 2 Tahun",
+      "minTenor": "2 Tahun",
+      "rates": {
+        "A": "7.75%",
+        "B": "8.00%",
+        "C": "8.50%",
+        "D": "9.25%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 3 Tahun",
+      "minTenor": "15 Tahun",
+      "rates": {
+        "A": "2.75%",
+        "B": "3.25%",
+        "C": "3.75%",
+        "D": "-"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 3 Tahun",
+      "minTenor": "10 Tahun",
+      "rates": {
+        "A": "3.75%",
+        "B": "4.25%",
+        "C": "4.75%",
+        "D": "5.75%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 3 Tahun",
+      "minTenor": "5 Tahun",
+      "rates": {
+        "A": "6.75%",
+        "B": "7.25%",
+        "C": "7.75%",
+        "D": "8.75%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 3 Tahun",
+      "minTenor": "3 Tahun",
+      "rates": {
+        "A": "7.75%",
+        "B": "8.00%",
+        "C": "8.50%",
+        "D": "9.25%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 4 Tahun",
+      "minTenor": "4 Tahun",
+      "rates": {
+        "A": "8.00%",
+        "B": "8.25%",
+        "C": "8.75%",
+        "D": "9.50%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 5 Tahun",
+      "minTenor": "15 Tahun",
+      "rates": {
+        "A": "3.75%",
+        "B": "4.25%",
+        "C": "5.25%",
+        "D": "-"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 5 Tahun",
+      "minTenor": "12 Tahun",
+      "rates": {
+        "A": "4.75%",
+        "B": "5.25%",
+        "C": "6.25%",
+        "D": "-"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 5 Tahun",
+      "minTenor": "10 Tahun",
+      "rates": {
+        "A": "5.75%",
+        "B": "6.25%",
+        "C": "6.75%",
+        "D": "7.75%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 5 Tahun",
+      "minTenor": "5 Tahun",
+      "rates": {
+        "A": "8.00%",
+        "B": "8.25%",
+        "C": "8.75%",
+        "D": "9.50%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 6 Tahun",
+      "minTenor": "6 Tahun",
+      "rates": {
+        "A": "8.00%",
+        "B": "8.25%",
+        "C": "8.75%",
+        "D": "9.50%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 7 Tahun",
+      "minTenor": "7 Tahun",
+      "rates": {
+        "A": "8.00%",
+        "B": "8.25%",
+        "C": "8.75%",
+        "D": "9.50%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 8 Tahun",
+      "minTenor": "8 Tahun",
+      "rates": {
+        "A": "8.00%",
+        "B": "8.25%",
+        "C": "8.75%",
+        "D": "9.50%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 9 Tahun",
+      "minTenor": "9 Tahun",
+      "rates": {
+        "A": "8.25%",
+        "B": "8.75%",
+        "C": "9.25%",
+        "D": "10.25%"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed 10 Tahun",
+      "minTenor": "10 Tahun",
+      "rates": {
+        "A": "8.25%",
+        "B": "8.75%",
+        "C": "9.25%",
+        "D": "10.25%"
+      }
+    }
+  ],
+  "fixedBerjenjang": [
+    {
+      "fixedPeriod": "Fixed tahun ke-1",
+      "minTenor": "15 Tahun",
+      "rates": {
+        "A": "2.75%",
+        "B": "3.25%",
+        "C": "3.75%",
+        "D": "-"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed tahun ke-2 sampai dengan 3",
+      "minTenor": "15 Tahun",
+      "rates": {
+        "A": "4.75%",
+        "B": "5.25%",
+        "C": "5.75%",
+        "D": "-"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed tahun ke-4 sampai dengan 5",
+      "minTenor": "15 Tahun",
+      "rates": {
+        "A": "6.75%",
+        "B": "7.25%",
+        "C": "7.75%",
+        "D": "-"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed tahun ke-6 sampai dengan 7",
+      "minTenor": "15 Tahun",
+      "rates": {
+        "A": "8.75%",
+        "B": "9.25%",
+        "C": "9.75%",
+        "D": "-"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed tahun ke-8 sampai dengan 10",
+      "minTenor": "15 Tahun",
+      "rates": {
+        "A": "10.75%",
+        "B": "11.25%",
+        "C": "11.75%",
+        "D": "-"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed tahun ke-1",
+      "minTenor": "10 Tahun",
+      "rates": {
+        "A": "2.75%",
+        "B": "3.25%",
+        "C": "3.75%",
+        "D": "-"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed tahun ke-2",
+      "minTenor": "10 Tahun",
+      "rates": {
+        "A": "4.75%",
+        "B": "5.25%",
+        "C": "5.75%",
+        "D": "-"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed tahun ke-3",
+      "minTenor": "10 Tahun",
+      "rates": {
+        "A": "6.75%",
+        "B": "7.25%",
+        "C": "7.75%",
+        "D": "-"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed tahun ke-4",
+      "minTenor": "10 Tahun",
+      "rates": {
+        "A": "8.75%",
+        "B": "9.25%",
+        "C": "9.75%",
+        "D": "-"
+      }
+    },
+    {
+      "fixedPeriod": "Fixed tahun ke-5 sampai dengan 10",
+      "minTenor": "10 Tahun",
+      "rates": {
+        "A": "10.75%",
+        "B": "11.25%",
+        "C": "11.75%",
+        "D": "-"
+      }
+    }
+  ],
+  "fees": {
+    "provisi": "1,00% dari plafon kredit",
+    "administrasi": "Rp 750.000,- sampai dengan Rp 2.500.000,-"
+  }
+}
