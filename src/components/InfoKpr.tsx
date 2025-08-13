@@ -100,11 +100,15 @@ const BniGriyaSection = () => {
           isExpanded ? "max-h-96" : "max-h-10 overflow-hidden"
         }`}
       >
-        Fasilitas pembiayaan konsumtif beragunan properti rumah tinggal yang
-        dapat digunakan untuk tujuan pembelian, pembangunan/renovasi, take over,
-        refinancing, dan lain-lain. Fleksibilitas ini memungkinkan nasabah untuk
-        memenuhi berbagai kebutuhan finansial dengan jaminan properti yang
-        dimiliki.
+        Nikmati kemudahan memenuhi berbagai kebutuhan finansial Anda melalui
+        fasilitas pembiayaan konsumtif beragunan properti rumah. Dengan
+        fleksibilitas tinggi, layanan ini dapat digunakan untuk pembelian rumah
+        baru, pembangunan atau renovasi, take over KPR dari bank lain, hingga
+        refinancing untuk tambahan dana tunai. Keunggulannya? Proses cepat,
+        transparan, dan terintegrasi dengan platform digital, memastikan Anda
+        dapat mengajukan pembiayaan dengan aman dan efisien—kapan saja, di mana
+        saja. Rumah Anda bukan hanya tempat tinggal, tapi juga aset yang bisa
+        mewujudkan rencana masa depan.
       </p>
       {isOverflowing && (
         <button
@@ -226,7 +230,7 @@ const InfoKprPage: React.FC = () => {
 
   return (
     <div className="bg-gray-50 font-sans">
-      <div className="container mx-auto max-w-3xl p-4 md:p-6">
+      <div className="container p-4 md:p-6">
         <h1 className="text-2xl font-bold text-gray-900 text-center mb-8">
           Informasi KPR
         </h1>
