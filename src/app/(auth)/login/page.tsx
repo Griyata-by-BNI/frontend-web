@@ -81,16 +81,6 @@ const LoginPage: React.FC = () => {
               </p>
             </div>
 
-            {/* Error Alert - hanya tampil jika ada error */}
-            {error && (
-              <Alert 
-                message={error.message}  // Error message dari API
-                type="error"             // Error type (red alert)
-                className="mb-4" 
-              />
-            )}
-
-            {/* Form Component */}
             <Form
               form={form}
               onFinish={handleSubmit}
