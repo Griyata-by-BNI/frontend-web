@@ -16,7 +16,11 @@ const LoginPage: React.FC = () => {
   const { message: messageApi } = App.useApp();
   const { mutateAsync: loginApi, status } = useLogin();
 
-  const handleSubmit = async (values: { email: string; password: string; rememberMe?: boolean }) => {
+  const handleSubmit = async (values: {
+    email: string;
+    password: string;
+    rememberMe?: boolean;
+  }) => {
     try {
       const { email, password, rememberMe } = values;
 
@@ -39,14 +43,17 @@ const LoginPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    const savedCredential = localStorage.getItem("credential");
+    if (savedCredential) {
       try {
-        const rememberedEmail = localStorage.getItem("rememberedEmail");
-        if (rememberedEmail) {
-          form.setFieldsValue({ email: rememberedEmail, rememberMe: true });
-        }
+        const { email, password } = JSON.parse(savedCredential);
+        form.setFieldsValue({
+          email,
+          password,
+          rememberMe: true,
+        });
       } catch {
-        // localStorage not available
+        localStorage.removeItem("credential");
       }
     }
   }, [form]);
@@ -124,7 +131,9 @@ const LoginPage: React.FC = () => {
 
                 <Link
                   href="/forgot-password"
-                  className={`!text-teal-600 hover:!text-teal-700 font-medium ${loading ? "pointer-events-none opacity-50" : ""}`}
+                  className={`!text-teal-600 hover:!text-teal-700 font-medium ${
+                    loading ? "pointer-events-none opacity-50" : ""
+                  }`}
                 >
                   Lupa password?
                 </Link>
@@ -135,7 +144,7 @@ const LoginPage: React.FC = () => {
                   type="primary"
                   htmlType="submit"
                   loading={loading}
-                  className="w-full"
+                  className="w-full "
                   size="large"
                 >
                   Masuk
@@ -146,7 +155,9 @@ const LoginPage: React.FC = () => {
                 Belum memiliki akun?{" "}
                 <Link
                   href="/register"
-                  className={`!text-teal-600 hover:!text-teal-800 font-semibold ${loading ? "pointer-events-none opacity-50" : ""}`}
+                  className={`!text-teal-600 hover:!text-teal-800 font-semibold ${
+                    loading ? "pointer-events-none opacity-50" : ""
+                  }`}
                 >
                   Daftar
                 </Link>
