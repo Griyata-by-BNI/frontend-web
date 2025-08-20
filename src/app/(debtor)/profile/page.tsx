@@ -212,7 +212,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
     if (onNavigateToPolicy) {
       onNavigateToPolicy();
     } else {
-      router.push('/profile/favorite');
+      router.push('/favorite');
     }
   }, [onNavigateToPolicy, router]);
 
