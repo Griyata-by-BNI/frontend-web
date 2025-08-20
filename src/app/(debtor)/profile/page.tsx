@@ -228,10 +228,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
   return (
     <div className="mb-[-90px] ml-[-160px] mr-[-160px] min-h-screen bg-gray-500 flex flex-col justify-between">
       {/* Header */}
-      <div className="mt-[-45px] ml-[-160px] mr-[-160px] bg-gradient-to-br from-teal-400 to-teal-600 h-22 relative overflow-hidden"></div>
+      <div className="w-full mt-[-48px] bg-gradient-to-br from-teal-400 to-teal-600 h-22 relative overflow-hidden"></div>
 
       {/* Main Content */}
-      <div className="flex-1 container mx-auto px-6 -mt-16">
+      <div className="flex-1 container mx-auto px-6 -mt-15">
         <div className="max-w-2xl mx-auto">
           {/* Profile Card */}
           <div className="mb-6">
@@ -244,7 +244,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
 
           {/* Menu Card */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-300 mb-6">
-            <div className="space-y-4">
+            <div className="space-y-">
               <button
                 onClick={handleHistoryClick}
                 className="w-full flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg transition-colors group"
