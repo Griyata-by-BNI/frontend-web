@@ -3,6 +3,8 @@
 import React, { useCallback } from 'react';
 import { Clock, Shield, LogOut, Edit } from 'lucide-react';
 import clsx from 'clsx';
+import { useAuth } from '@/contexts/authContext';
+import { redirect } from 'next/navigation';
 
 // Types
 interface UserData {
@@ -195,10 +197,16 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
     }
   }, [onLogout]);
 
+  const {user:savedData} = useAuth();
+
+  if(!savedData){
+    redirect("/")
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
+    <div className="mb-[-90px] ml-[-160px] mr-[-160px] min-h-screen bg-gray-500 flex flex-col justify-between">
       {/* Teal Header Section */}
-      <div className="mb-[-32px] mt-[-32px] ml-[-32px] mr-[-32px] bg-gradient-to-br from-teal-400 to-teal-600 h-32 relative overflow-hidden">
+      <div className="mt-[-45px] ml-[-160px] mr-[-160px] bg-gradient-to-br from-teal-400 to-teal-600 h-22 relative overflow-hidden">
       </div>
 
       {/* Main Content Container */}
@@ -259,7 +267,9 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
       </div>
 
       {/* Footer */}
+      <div className='mt-[10px]'>
       <Footer />
+      </div>
     </div>
   );
 };
