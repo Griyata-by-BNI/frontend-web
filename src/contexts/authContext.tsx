@@ -23,11 +23,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const savedToken = Cookies.get("auth_token");
-
-    if (savedToken) {
+    const initializeAuth = () => {
       try {
-        const decoded = jwtDecode<JwtPayload>(savedToken);
+        const savedToken = Cookies.get("auth_token");
+
+        if (savedToken) {
+          const decoded = jwtDecode<JwtPayload>(savedToken);
 
         if (decoded.exp * 1000 > Date.now()) {
           setToken(savedToken);
@@ -42,10 +43,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       } catch {
         Cookies.remove("auth_token");
+      } finally {
+        setLoading(false);
       }
-    }
+    };
 
-    setLoading(false);
+    initializeAuth();
   }, []);
 
   const login = (token: string) => {
