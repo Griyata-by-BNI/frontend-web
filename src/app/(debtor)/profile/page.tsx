@@ -1,14 +1,14 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { Clock, Shield, LogOut, Edit } from 'lucide-react';
-import clsx from 'clsx';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Clock, Star, Shield, LogOut, Edit } from 'lucide-react';
+import { useRouter, redirect } from 'next/navigation';
 import { useAuth } from '@/contexts/authContext';
-import { redirect } from 'next/navigation';
+import axiosInstance from '@/utils/axios';
 
 // Types
 interface UserData {
-  id: string;
+  id: string | number;
   name: string;
   email: string;
   phone: string;
@@ -23,11 +23,21 @@ interface ProfilePageProps {
   onLogout?: () => void;
 }
 
-// Constants
-const DEFAULT_USER: Partial<UserData> = {
-  name: 'Nafira Elba',
-  email: 'nafira.elba@gmail.com',
-};
+// Skeleton Loader Component
+const ProfileSkeleton: React.FC = () => (
+  <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 animate-pulse">
+    <div className="flex items-center justify-between">
+      <div className="flex items-center space-x-4 flex-1 min-w-0">
+        <div className="w-16 h-16 rounded-full bg-gray-200" />
+        <div className="flex-1 min-w-0 space-y-2">
+          <div className="h-5 bg-gray-200 rounded w-32" />
+          <div className="h-4 bg-gray-200 rounded w-48" />
+        </div>
+      </div>
+      <div className="w-10 h-10 rounded-full bg-gray-200" />
+    </div>
+  </div>
+);
 
 // Avatar Component
 const Avatar: React.FC<{ user?: UserData }> = ({ user }) => {
@@ -71,10 +81,10 @@ const ProfileCard: React.FC<{
           <Avatar user={user} />
           <div className="flex-1 min-w-0">
             <h2 className="text-xl font-bold text-gray-900 truncate">
-              {user?.name || DEFAULT_USER.name}
+              {user?.name || '-'}
             </h2>
             <p className="text-teal-600 truncate">
-              {user?.email || DEFAULT_USER.email}
+              {user?.email || '-'}
             </p>
           </div>
         </div>
@@ -90,43 +100,8 @@ const ProfileCard: React.FC<{
   );
 };
 
-// Menu Card Component
-const MenuCard: React.FC<{
-  icon: React.ReactNode;
-  title: string;
-  onClick?: () => void;
-}> = ({ icon, title, onClick }) => {
-  return (
-    <button
-      onClick={onClick}
-      className="w-full bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md hover:border-teal-200 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 text-left group"
-    >
-      <div className="flex items-center space-x-4">
-        <div className="w-12 h-12 bg-teal-50 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-teal-100 transition-colors">
-          {icon}
-        </div>
-        <div className="flex-1">
-          <h3 className="text-gray-800 font-semibold text-lg group-hover:text-teal-600 transition-colors">
-            {title}
-          </h3>
-        </div>
-        <svg 
-          className="w-5 h-5 text-gray-400 group-hover:text-teal-600 transition-colors" 
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </div>
-    </button>
-  );
-};
-
 // Logout Button Component
-const LogoutButton: React.FC<{
-  onClick?: () => void;
-}> = ({ onClick }) => {
+const LogoutButton: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
@@ -155,7 +130,7 @@ const VersionInfo: React.FC = () => (
   </div>
 );
 
-// MAIN COMPONENT - Web Layout matching mobile design
+// MAIN COMPONENT
 const ProfilePage: React.FC<ProfilePageProps> = ({
   user,
   onEditProfile,
@@ -163,30 +138,83 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
   onNavigateToPolicy,
   onLogout,
 }) => {
-  // Event handlers
+  const router = useRouter();
+  const { user: savedData, token } = useAuth();
+  const [profile, setProfile] = useState<UserData | undefined>(user);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // 🔥 Fetch Profile API
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!savedData?.userId) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await axiosInstance.get(`/profiles/${savedData.userId}`, {headers: {
+          Authorization: `Bearer ${token}`,
+        }});
+        const data = res.data?.data?.profile;
+
+        if (data) {
+          setProfile({
+            id: data.userId,
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            avatar: data.photoUrl,
+          });
+        } else {
+          setProfile(undefined);
+        }
+      } catch (err) {
+        console.error('Failed to fetch profile:', err);
+        setProfile(undefined);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [savedData]);
+
+  if (!savedData) {
+    redirect('/');
+  }
+
+  // Handlers
   const handleEditProfile = useCallback(() => {
     if (onEditProfile) {
       onEditProfile();
     } else {
-      console.log('Navigate to edit profile page');
+      router.push('/profile/edit');
     }
-  }, [onEditProfile]);
+  }, [onEditProfile, router]);
 
   const handleHistoryClick = useCallback(() => {
     if (onNavigateToHistory) {
       onNavigateToHistory();
     } else {
-      console.log('Navigate to: Riwayat Pengajuan KPRmu');
+      router.push('/profile/history');
     }
-  }, [onNavigateToHistory]);
+  }, [onNavigateToHistory, router]);
 
   const handlePolicyClick = useCallback(() => {
     if (onNavigateToPolicy) {
       onNavigateToPolicy();
     } else {
-      console.log('Navigate to: Kebijakan Aplikasi');
+      router.push('/profile/policy');
     }
-  }, [onNavigateToPolicy]);
+  }, [onNavigateToPolicy, router]);
+
+    const handleFavoriteClick = useCallback(() => {
+    if (onNavigateToPolicy) {
+      onNavigateToPolicy();
+    } else {
+      router.push('/profile/favorite');
+    }
+  }, [onNavigateToPolicy, router]);
 
   const handleLogout = useCallback(() => {
     const confirmed = window.confirm('Apakah Anda yakin ingin keluar dari akun?');
@@ -197,31 +225,24 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
     }
   }, [onLogout]);
 
-  const {user:savedData} = useAuth();
-
-  if(!savedData){
-    redirect("/")
-  }
-
   return (
     <div className="mb-[-90px] ml-[-160px] mr-[-160px] min-h-screen bg-gray-500 flex flex-col justify-between">
-      {/* Teal Header Section */}
-      <div className="mt-[-45px] ml-[-160px] mr-[-160px] bg-gradient-to-br from-teal-400 to-teal-600 h-22 relative overflow-hidden">
-      </div>
+      {/* Header */}
+      <div className="mt-[-45px] ml-[-160px] mr-[-160px] bg-gradient-to-br from-teal-400 to-teal-600 h-22 relative overflow-hidden"></div>
 
-      {/* Main Content Container */}
+      {/* Main Content */}
       <div className="flex-1 container mx-auto px-6 -mt-16">
         <div className="max-w-2xl mx-auto">
-          
-          {/* Profile Card - On white background */}
+          {/* Profile Card */}
           <div className="mb-6">
-            <ProfileCard 
-              user={user} 
-              onEditProfile={handleEditProfile} 
-            />
+            {loading ? (
+              <ProfileSkeleton />
+            ) : (   
+              <ProfileCard user={profile} onEditProfile={handleEditProfile} />
+            )}
           </div>
 
-          {/* Combined Menu Card */}
+          {/* Menu Card */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-300 mb-6">
             <div className="space-y-4">
               <button
@@ -253,6 +274,23 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
                   </h3>
                 </div>
               </button>
+
+              <hr className="border-gray-100" />
+
+              <button
+                onClick={handleFavoriteClick}
+                className="w-full flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-lg transition-colors group"
+              >
+                <div className="w-12 h-12 bg-teal-50 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-teal-100 transition-colors">
+                  <Star className="w-6 h-6 text-teal-600" />
+                </div>
+                <div className="flex-1 text-left">
+                  <h3 className="text-gray-800 font-semibold text-lg group-hover:text-teal-600 transition-colors">
+                    Favorit
+                  </h3>
+                </div>
+              </button>
+              
             </div>
           </div>
 
@@ -267,8 +305,8 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
       </div>
 
       {/* Footer */}
-      <div className='mt-[10px]'>
-      <Footer />
+      <div className="mt-[10px]">
+        <Footer />
       </div>
     </div>
   );

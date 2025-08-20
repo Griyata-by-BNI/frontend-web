@@ -30,16 +30,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (savedToken) {
           const decoded = jwtDecode<JwtPayload>(savedToken);
 
-        if (decoded.exp * 1000 > Date.now()) {
-          setToken(savedToken);
-          setUser({
-            userId: decoded.userId,
-            email: decoded.email,
-            fullName: decoded.fullName,
-            role: decoded.role,
-          });
-        } else {
-          Cookies.remove("auth_token");
+          if (decoded.exp * 1000 > Date.now()) {
+            setToken(savedToken);
+            setUser({
+              userId: decoded.userId,
+              email: decoded.email,
+              fullName: decoded.fullName,
+              role: decoded.role,
+            });
+          } else {
+            Cookies.remove("auth_token");
+          }
         }
       } catch {
         Cookies.remove("auth_token");
