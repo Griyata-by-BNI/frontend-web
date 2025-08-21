@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Clock, Star, Shield, LogOut, Edit } from 'lucide-react';
 import { useRouter, redirect } from 'next/navigation';
 import { useAuth } from '@/contexts/authContext';
-import { axiosInstance } from '@/utils/axios';
+import axiosInstance from '@/utils/axios';
 
 // Types
 interface UserData {
