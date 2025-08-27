@@ -26,9 +26,10 @@ const LoginPage: React.FC = () => {
       login(response.data.token);
 
       if (rememberMe) {
-        localStorage.setItem("credential", JSON.stringify({ email, password }));
+        // simpan hanya email, bukan password
+        localStorage.setItem("lastEmail", email);
       } else {
-        localStorage.removeItem("credential");
+        localStorage.removeItem("lastEmail");
       }
     } catch (err: any) {
       messageApi.error("Login gagal. Mohon periksa email dan password anda!");
@@ -36,18 +37,13 @@ const LoginPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const savedCredential = localStorage.getItem("credential");
-    if (savedCredential) {
-      try {
-        const { email, password } = JSON.parse(savedCredential);
-        form.setFieldsValue({
-          email,
-          password,
-          rememberMe: true,
-        });
-      } catch {
-        localStorage.removeItem("credential");
-      }
+    const lastEmail = localStorage.getItem("lastEmail");
+    if (lastEmail) {
+      form.setFieldsValue({
+        email: lastEmail,
+        password: "", // jangan isi password
+        rememberMe: true,
+      });
     }
   }, [form]);
 
