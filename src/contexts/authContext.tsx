@@ -99,9 +99,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else {
           throw new Error("Invalid role");
         }
-      } catch {
+      } catch (err) {
         hardLogout();
         router.replace("/login");
+
+        throw err;
       }
     },
     [hardLogout, router]
