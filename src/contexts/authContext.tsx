@@ -94,16 +94,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           sameSite: "strict",
         });
 
-        if (role === "ADMIN") {
-          router.push("/admin/developer-management");
-        }
-
         if (role === "DEBTOR") {
           router.push("/");
-        }
-
-        if (role === "SALES") {
-          router.push("/sales/approval-list");
+        } else {
+          throw new Error("Invalid role");
         }
       } catch {
         hardLogout();
