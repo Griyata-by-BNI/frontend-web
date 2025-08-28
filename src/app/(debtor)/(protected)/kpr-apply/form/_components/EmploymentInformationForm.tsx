@@ -163,6 +163,11 @@ export default function EmploymentInformationForm() {
               <Input
                 size="large"
                 placeholder="Masukkan nomor telepon perusahaan"
+                onKeyPress={(e) => {
+                  if (!/[0-9]/.test(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
               />
             </Form.Item>
           </Col>
@@ -382,6 +387,11 @@ export default function EmploymentInformationForm() {
               <Input
                 size="large"
                 placeholder="Masukkan nomor telepon perusahaan"
+                onKeyPress={(e) => {
+                  if (!/[0-9]/.test(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
               />
             </Form.Item>
           </Col>

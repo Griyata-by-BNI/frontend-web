@@ -10,6 +10,9 @@ import PropertyInformation from "./_components/PropertyInformation";
 import SpouseInformationForm from "./_components/SpouseInformationForm";
 import SummaryForm from "./_components/SummaryForm";
 import { useKprApplyStore } from "@/stores/useKprApplyStore";
+import { useAuth } from "@/contexts/authContext";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 const items = [
   { title: "Informasi Pengajuan" },
@@ -21,15 +24,34 @@ const items = [
 ];
 
 export default function KprApplyForm() {
-  const { currentStep, next, prev, setCurrentStep } = useKprApplyStore(
+  const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const propertyId = searchParams.get("property_id");
+  
+  const { currentStep, next, prev, setCurrentStep, initSession, isValidSession, reset } = useKprApplyStore(
     useShallow((s) => ({
       currentStep: s.currentStep,
       formData: s.formData,
       next: s.next,
       prev: s.prev,
       setCurrentStep: s.setCurrentStep,
+      initSession: s.initSession,
+      isValidSession: s.isValidSession,
+      reset: s.reset,
     }))
   );
+  
+  useEffect(() => {
+    if (!user?.userId || !propertyId) return;
+    
+    const userId = user.userId;
+    const propId = Number(propertyId);
+    
+    if (!isValidSession(userId, propId)) {
+      reset();
+      initSession(userId, propId);
+    }
+  }, [user?.userId, propertyId, initSession, isValidSession, reset]);
 
   const lastStepIndex = items.length - 1;
 

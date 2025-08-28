@@ -9,7 +9,9 @@ import {
   Form,
   Checkbox,
   App,
+  Modal,
 } from "antd";
+import { EyeOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useKprApplyStore } from "@/stores/useKprApplyStore";
 import { useShallow } from "zustand/react/shallow";
@@ -43,10 +45,41 @@ export default function SummaryForm() {
     return isNaN(dt.getTime()) ? "-" : dt.toLocaleDateString("id-ID");
   };
 
-  const yesNoTag = (ok: boolean) => (
-    <Tag color={ok ? "green" : "red"}>
-      {ok ? "Sudah diunggah" : "Belum diunggah"}
-    </Tag>
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+
+  const handlePreview = (files: any[], title: string) => {
+    if (files && files.length > 0) {
+      const file = files[0];
+      let url = file.url;
+      if (!url && file.originFileObj && file.originFileObj instanceof File) {
+        url = URL.createObjectURL(file.originFileObj);
+      }
+      if (url) {
+        setPreviewUrl(url);
+        setPreviewTitle(title);
+        setPreviewVisible(true);
+      }
+    }
+  };
+
+  const yesNoTag = (ok: boolean, files?: any[], title?: string) => (
+    <div className="flex items-center gap-2">
+      <Tag color={ok ? "green" : "red"}>
+        {ok ? "Sudah diunggah" : "Belum diunggah"}
+      </Tag>
+      {ok && files && files.length > 0 && (
+        <Button
+          type="link"
+          size="small"
+          icon={<EyeOutlined />}
+          onClick={() => handlePreview(files, title || "Dokumen")}
+        >
+          Preview
+        </Button>
+      )}
+    </div>
   );
 
   const hasEmploymentHistory =
@@ -439,25 +472,33 @@ export default function SummaryForm() {
                 <Descriptions.Item label="KTP">
                   {yesNoTag(
                     Array.isArray(formData?.id_card) &&
-                      formData.id_card.length > 0
+                      formData.id_card.length > 0,
+                    formData?.id_card,
+                    "KTP"
                   )}
                 </Descriptions.Item>
                 <Descriptions.Item label="NPWP">
                   {yesNoTag(
                     Array.isArray(formData?.tax_id) &&
-                      formData.tax_id.length > 0
+                      formData.tax_id.length > 0,
+                    formData?.tax_id,
+                    "NPWP"
                   )}
                 </Descriptions.Item>
                 <Descriptions.Item label="Sertifikat Pekerjaan">
                   {yesNoTag(
                     Array.isArray(formData?.employment_certificate) &&
-                      formData.employment_certificate.length > 0
+                      formData.employment_certificate.length > 0,
+                    formData?.employment_certificate,
+                    "Sertifikat Pekerjaan"
                   )}
                 </Descriptions.Item>
                 <Descriptions.Item label="Slip Gaji">
                   {yesNoTag(
                     Array.isArray(formData?.salary_slip) &&
-                      formData.salary_slip.length > 0
+                      formData.salary_slip.length > 0,
+                    formData?.salary_slip,
+                    "Slip Gaji"
                   )}
                 </Descriptions.Item>
                 {formData?.is_married && (
@@ -465,13 +506,17 @@ export default function SummaryForm() {
                     <Descriptions.Item label="KTP Pasangan">
                       {yesNoTag(
                         Array.isArray(formData?.spouse_id_card) &&
-                          formData.spouse_id_card.length > 0
+                          formData.spouse_id_card.length > 0,
+                        formData?.spouse_id_card,
+                        "KTP Pasangan"
                       )}
                     </Descriptions.Item>
                     <Descriptions.Item label="Buku Nikah">
                       {yesNoTag(
                         Array.isArray(formData?.marriage_certificate) &&
-                          formData.marriage_certificate.length > 0
+                          formData.marriage_certificate.length > 0,
+                        formData?.marriage_certificate,
+                        "Buku Nikah"
                       )}
                     </Descriptions.Item>
                   </>
@@ -526,6 +571,23 @@ export default function SummaryForm() {
           </Button>
         </div>
       </Card>
+
+      <Modal
+        open={previewVisible}
+        title={previewTitle}
+        footer={null}
+        onCancel={() => setPreviewVisible(false)}
+        width={800}
+        centered
+      >
+        <div className="flex justify-center">
+          <img
+            src={previewUrl}
+            alt={previewTitle}
+            style={{ maxWidth: "100%", maxHeight: "70vh" }}
+          />
+        </div>
+      </Modal>
     </div>
   );
 }

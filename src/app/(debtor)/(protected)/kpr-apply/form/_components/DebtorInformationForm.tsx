@@ -106,17 +106,6 @@ export default function DebtorInformationForm() {
     checkFormValidity();
   }, [formData, form]);
 
-  // ====== Sinkronisasi alamat domisili dengan KTP saat checkbox aktif ======
-  const sameAsKtp = Form.useWatch("same_as_ktp", form);
-  const idCardAddress = Form.useWatch("id_card_address", form);
-
-  useEffect(() => {
-    if (sameAsKtp) {
-      form.setFieldsValue({ domicile_address: idCardAddress || "" });
-    }
-  }, [sameAsKtp, idCardAddress, form]);
-  // ========================================================================
-
   const handleNext = () => {
     const values = form.getFieldsValue();
     next(values);
@@ -141,9 +130,9 @@ export default function DebtorInformationForm() {
               name="full_name"
               rules={[{ required: true, message: "Nama lengkap wajib diisi" }]}
             >
-              <Input 
-                size="large" 
-                placeholder="Masukkan nama lengkap" 
+              <Input
+                size="large"
+                placeholder="Masukkan nama lengkap"
                 onKeyPress={(e) => /[0-9]/.test(e.key) && e.preventDefault()}
               />
             </Form.Item>
@@ -159,9 +148,9 @@ export default function DebtorInformationForm() {
                 { len: 16, message: "NIK harus 16 digit" },
               ]}
             >
-              <Input 
-                size="large" 
-                placeholder="Masukkan NIK" 
+              <Input
+                size="large"
+                placeholder="Masukkan NIK"
                 maxLength={16}
                 onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
               />
@@ -196,9 +185,9 @@ export default function DebtorInformationForm() {
                 { required: true, message: "Nama ibu kandung wajib diisi" },
               ]}
             >
-              <Input 
-                size="large" 
-                placeholder="Masukkan nama ibu kandung" 
+              <Input
+                size="large"
+                placeholder="Masukkan nama ibu kandung"
                 onKeyPress={(e) => /[0-9]/.test(e.key) && e.preventDefault()}
               />
             </Form.Item>
@@ -388,6 +377,22 @@ export default function DebtorInformationForm() {
                 }
               }}
             </Form.Item>
+
+            <Form.Item
+              noStyle
+              dependencies={["same_as_ktp", "id_card_address"]}
+            >
+              {({ getFieldValue, setFieldsValue }) => {
+                const sameAsKtp = getFieldValue("same_as_ktp");
+                const idCardAddress = getFieldValue("id_card_address");
+
+                if (sameAsKtp) {
+                  setFieldsValue({ domicile_address: idCardAddress || "" });
+                }
+
+                return null;
+              }}
+            </Form.Item>
           </Col>
         </Row>
       </Card>
@@ -404,9 +409,9 @@ export default function DebtorInformationForm() {
               name="emergency_contact_name"
               rules={[{ required: true, message: "Nama lengkap wajib diisi" }]}
             >
-              <Input 
-                size="large" 
-                placeholder="Masukkan nama lengkap" 
+              <Input
+                size="large"
+                placeholder="Masukkan nama lengkap"
                 onKeyPress={(e) => /[0-9]/.test(e.key) && e.preventDefault()}
               />
             </Form.Item>
