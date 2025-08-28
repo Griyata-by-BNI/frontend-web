@@ -87,9 +87,7 @@ const LoginPage: React.FC = () => {
   }) => {
     try {
       const { email, password, rememberMe } = values;
-
       const response = await loginApi({ email, password });
-
       login(response.data.token);
 
       if (rememberMe) {
@@ -146,7 +144,38 @@ const LoginPage: React.FC = () => {
   const deco = alertDecorMap[reasonAlert?.type || "info"] ?? alertDecorMap.info;
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    // 👇 jadikan root sebagai anchor untuk absolute alert
+    <div className="min-h-screen bg-white flex flex-col relative">
+      {/* 🔔 ALERT absolut di kanan-atas */}
+      {reasonAlert && showReason && (
+        <div
+          className={`
+            absolute top-3 right-3 sm:top-4 sm:right-4 z-50
+            w-[min(92vw,420px)]
+            rounded-xl ${deco.bg} ring-1 ${deco.ring} shadow-lg
+            overflow-hidden pointer-events-auto
+          `}
+          role="status"
+          aria-live="polite"
+        >
+          <div
+            className={`absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b ${deco.grad}`}
+          />
+          <Alert
+            showIcon
+            type={reasonAlert.type}
+            message={<div className="font-semibold">{reasonAlert.title}</div>}
+            description={
+              reasonAlert.desc ||
+              (from ? `Halaman sebelumnya: ${from}` : undefined)
+            }
+            closable
+            onClose={() => setShowReason(false)}
+            className="!bg-transparent !border-0 !px-4 !py-3 pl-6"
+          />
+        </div>
+      )}
+
       <div className="flex-1 flex flex-col lg:flex-row">
         <div className="hidden lg:block lg:w-1/2 relative min-h-[600px]">
           <Image
@@ -161,34 +190,6 @@ const LoginPage: React.FC = () => {
 
         <div className="flex-1 lg:w-1/2 bg-gray-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
           <div className="w-full max-w-md mx-auto">
-            {reasonAlert && showReason && (
-              <div
-                className={`
-              relative mb-6 rounded-xl ${deco.bg}
-              ring-1 ${deco.ring} shadow-sm transition-all duration-300
-            `}
-              >
-                <div
-                  className={`absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b ${deco.grad}`}
-                />
-                <Alert
-                  showIcon
-                  type={reasonAlert.type}
-                  message={
-                    <div className="font-semibold">{reasonAlert.title}</div>
-                  }
-                  description={
-                    reasonAlert.desc ||
-                    (from ? `Halaman sebelumnya: ${from}` : undefined)
-                  }
-                  banner
-                  closable
-                  onClose={() => setShowReason(false)}
-                  className="!bg-transparent !border-0 !px-4 !py-3 pl-6"
-                />
-              </div>
-            )}
-
             <div className="mb-6">
               <h2 className="text-2xl sm:text-3xl font-bold text-teal-600 mb-1 text-center">
                 Masuk aplikasi
