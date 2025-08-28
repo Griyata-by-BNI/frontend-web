@@ -50,11 +50,27 @@ export type VerifyEmailPayload = {
   otp: string;
 };
 
+export type LogoutReason =
+  | "manual"
+  | "expired"
+  | "idle"
+  | "unauthenticated"
+  | "invalid-token"
+  | "forbidden"
+  | "revoked"
+  | "network";
+
+export type LogoutOptions = {
+  redirect?: boolean; // default: true
+  redirectTo?: string; // default: "/login"
+  includeReturnTo?: boolean; // default: false
+};
+
 export type AuthContextType = {
   user: DecodedUser | null;
   token: string | null;
   login: (token: string) => void;
-  logout: () => void;
+  logout: (reason?: LogoutReason, opts?: LogoutOptions) => void; // <- diubah
   loading: boolean;
 };
 

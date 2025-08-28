@@ -8,11 +8,28 @@ import {
   useState,
   ReactNode,
   useCallback,
+  useRef,
 } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { Spin } from "antd";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+
+type LogoutReason =
+  | "manual"
+  | "expired"
+  | "idle"
+  | "unauthenticated"
+  | "invalid-token"
+  | "forbidden"
+  | "revoked"
+  | "network";
+
+type LogoutOptions = {
+  redirect?: boolean; // default: true
+  redirectTo?: string; // default: "/login"
+  includeReturnTo?: boolean; // default: false (kalau true, tambahkan ?from=<path>)
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -20,36 +37,89 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<DecodedUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hasLoggedOut, setHasLoggedOut] = useState(false);
 
   const router = useRouter();
+  const pathname = usePathname();
+  const bcRef = useRef<BroadcastChannel | null>(null);
+
+  const buildLoginUrl = useCallback(
+    (
+      reason?: LogoutReason,
+      includeReturnTo?: boolean,
+      redirectTo = "/login"
+    ) => {
+      const params = new URLSearchParams();
+      if (reason) params.set("reason", reason);
+      if (includeReturnTo && pathname) params.set("from", pathname);
+      return `${redirectTo}?${params.toString()}`;
+    },
+    [pathname]
+  );
 
   const hardLogout = useCallback(() => {
     Cookies.remove("auth_token");
-    localStorage.removeItem("kpr-apply-form");
+    localStorage.removeItem("kpr-apply-store");
     setUser(null);
     setToken(null);
+    setHasLoggedOut(true);
   }, []);
 
-  const logout = useCallback(() => {
-    hardLogout();
-    router.replace("/login");
-  }, [hardLogout, router]);
+  const logout = useCallback(
+    (
+      reason: LogoutReason = "manual",
+      opts: LogoutOptions = {
+        redirect: true,
+        redirectTo: "/login",
+        includeReturnTo: false,
+      }
+    ) => {
+      // bersihkan sesi
+      hardLogout();
 
+      // broadcast ke tab lain agar ikut logout dengan reason yang sama
+      bcRef.current?.postMessage({ type: "LOGOUT", reason });
+
+      // redirect (default: true)
+      if (opts.redirect !== false) {
+        const url = buildLoginUrl(
+          reason,
+          !!opts.includeReturnTo,
+          opts.redirectTo ?? "/login"
+        );
+        router.replace(url);
+      }
+    },
+    [buildLoginUrl, hardLogout, router]
+  );
+
+  // Bootstrap sesi dari cookie
   useEffect(() => {
     let active = true;
 
-    const bootstrap = () => {
+    async function bootstrap() {
       try {
+        // jangan bootstrap jika sudah logout
+        if (hasLoggedOut) {
+          if (active) setLoading(false);
+          return;
+        }
+
         const savedToken = Cookies.get("auth_token");
-        if (!savedToken) return;
+
+        if (!savedToken) {
+          setUser(null);
+          setToken(null);
+          setLoading(false);
+          return;
+        }
 
         const decoded = jwtDecode<JwtPayload>(savedToken);
         const hasExp = typeof decoded.exp === "number";
         const isValid = hasExp ? decoded.exp * 1000 > Date.now() : false;
 
         if (!isValid) {
-          hardLogout();
-          router.replace("/login");
+          logout("expired");
           return;
         }
 
@@ -63,18 +133,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           });
         }
       } catch {
-        hardLogout();
-        router.replace("/login");
+        logout("invalid-token");
+      } finally {
+        if (active) setLoading(false);
       }
-    };
+    }
+
+    // siapkan BroadcastChannel untuk sinkronisasi antar-tab
+    if (typeof window !== "undefined" && "BroadcastChannel" in window) {
+      bcRef.current = new BroadcastChannel("auth");
+      bcRef.current.onmessage = (e) => {
+        if (e.data?.type === "LOGOUT") {
+          // jangan redirect berulang-ulang; cukup follow satu kali
+          hardLogout();
+          const url = buildLoginUrl(
+            (e.data?.reason as LogoutReason) ?? "manual",
+            false,
+            "/login"
+          );
+          router.replace(url);
+        }
+      };
+    }
 
     bootstrap();
-    setLoading(false);
 
     return () => {
       active = false;
+      bcRef.current?.close();
     };
-  }, [hardLogout, router]);
+  }, [buildLoginUrl, hardLogout, logout, router, hasLoggedOut]);
 
   const login = useCallback(
     (newToken: string) => {
@@ -88,6 +176,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         setUser({ userId, email, fullName, role });
         setToken(newToken);
+        setHasLoggedOut(false);
         Cookies.set("auth_token", newToken, {
           expires: 7,
           secure: process.env.NODE_ENV === "production",
@@ -100,13 +189,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           throw new Error("Invalid role");
         }
       } catch (err) {
-        hardLogout();
-        router.replace("/login");
-
+        // sertakan reason saat gagal login
+        logout("invalid-token");
         throw err;
       }
     },
-    [hardLogout, router]
+    [logout, router]
   );
 
   if (loading) {

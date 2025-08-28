@@ -22,6 +22,7 @@ import { useKprApplyStore } from "@/stores/useKprApplyStore";
 import { useShallow } from "zustand/react/shallow";
 import interestRateData from "@/data/interest-rate.json";
 import { useSubmitAllKpr } from "../_utils/useSubmitAllKpr";
+import { CloudUpload, FileCheck, TimerIcon } from "lucide-react";
 
 export default function SummaryForm() {
   const { formData, prev } = useKprApplyStore(
@@ -609,7 +610,7 @@ export default function SummaryForm() {
         onCancel={() => setPreviewVisible(false)}
         width={800}
         centered
-        destroyOnClose
+        destroyOnHidden
       >
         <div className="flex justify-center">
           <img
@@ -624,35 +625,17 @@ export default function SummaryForm() {
       <Modal
         open={confirmOpen}
         onCancel={!submitting ? () => setConfirmOpen(false) : undefined}
-        footer={
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 w-full">
-            <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500">
-              <ClockCircleOutlined />
-              <span>
-                Proses unggah dokumen memerlukan <b>± 1–5 menit</b> tergantung
-                ukuran file & koneksi internet.
-              </span>
-            </div>
-            <div className="flex gap-2 justify-end">
-              <Button
-                onClick={() => setConfirmOpen(false)}
-                disabled={submitting}
-              >
-                Periksa Kembali
-              </Button>
-              <Button
-                type="primary"
-                onClick={onConfirmSubmit}
-                loading={submitting}
-              >
-                Kirim Pengajuan
-              </Button>
-            </div>
-          </div>
-        }
+        footer={[
+          <Button onClick={() => setConfirmOpen(false)} disabled={submitting}>
+            Periksa Kembali
+          </Button>,
+          <Button type="primary" onClick={onConfirmSubmit} loading={submitting}>
+            Kirim Pengajuan
+          </Button>,
+        ]}
         width={720}
         centered
-        destroyOnClose
+        destroyOnHidden
         closable={!submitting}
         maskClosable={!submitting}
         keyboard={!submitting}
@@ -672,12 +655,13 @@ export default function SummaryForm() {
           </div>
         }
       >
-        <div className="space-y-4">
+        <div className="space-y-4 mt-4 mb-8">
           {/* Highlight waktu proses */}
-          <div className="rounded-xl border border-teal-200/70 bg-teal-50 p-3 flex items-start gap-3">
-            <div className="mt-0.5">
-              <ClockCircleOutlined className="text-teal-600" />
+          <div className="rounded-xl border border-teal-200/70 bg-teal-50 p-3 flex items-center gap-3">
+            <div>
+              <TimerIcon className="text-teal-600 h-8 w-8" />
             </div>
+
             <div className="text-sm">
               <div className="font-medium text-teal-700">
                 Estimasi proses unggah: <b>± 1–5 menit</b>
@@ -689,9 +673,10 @@ export default function SummaryForm() {
           </div>
 
           {/* Ringkasan cepat */}
-          <div className="rounded-xl border p-3">
-            <div className="flex items-center gap-2 mb-2">
-              <CloudUploadOutlined />
+          <div className="rounded-xl border border-gray-300 p-3">
+            <div className="flex items-center gap-3 mb-2">
+              <CloudUpload className="h-8 w-8" />
+
               <div className="text-sm font-medium">
                 Ringkasan dokumen:{" "}
                 <span className="text-gray-600">
@@ -714,9 +699,9 @@ export default function SummaryForm() {
           </div>
 
           {/* Peringatan tidak bisa diubah */}
-          <div className="rounded-xl border border-red-200 bg-red-50 p-3 flex items-start gap-3">
-            <div className="mt-0.5">
-              <FileDoneOutlined className="text-red-500" />
+          <div className="rounded-xl border border-red-200 bg-red-50 p-3 flex items-center gap-3">
+            <div className="">
+              <FileCheck className="text-red-500 h-8 w-8" />
             </div>
             <div className="text-sm text-red-700">
               Setelah pengajuan dikirim, Anda <b>tidak dapat mengubah</b> data

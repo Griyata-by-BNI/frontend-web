@@ -266,7 +266,7 @@ export default function SpouseInformationForm() {
                     >
                       <Input
                         size="large"
-                        placeholder="Masukkan NPWP (opsional)"
+                        placeholder="Masukkan NPWP"
                         maxLength={15}
                       />
                     </Form.Item>
