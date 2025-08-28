@@ -451,7 +451,10 @@ export default function EmploymentInformationForm() {
         </Row>
 
         <div className="flex justify-between mt-6">
-          <Button size="large" className="px-8" onClick={prev}>
+          <Button size="large" className="px-8" onClick={() => {
+            const values = form.getFieldsValue();
+            prev(values);
+          }}>
             Kembali
           </Button>
 

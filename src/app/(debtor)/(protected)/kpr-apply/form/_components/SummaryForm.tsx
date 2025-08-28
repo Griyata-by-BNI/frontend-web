@@ -57,9 +57,14 @@ export default function SummaryForm() {
         url = URL.createObjectURL(file.originFileObj);
       }
       if (url) {
-        setPreviewUrl(url);
-        setPreviewTitle(title);
-        setPreviewVisible(true);
+        const isPdf = file.type === 'application/pdf' || url.toLowerCase().includes('.pdf');
+        if (isPdf) {
+          window.open(url, '_blank');
+        } else {
+          setPreviewUrl(url);
+          setPreviewTitle(title);
+          setPreviewVisible(true);
+        }
       }
     }
   };
@@ -557,7 +562,10 @@ export default function SummaryForm() {
 
         {/* CTA */}
         <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <Button size="large" className="px-6 w-full md:w-auto" onClick={prev}>
+          <Button size="large" className="px-6 w-full md:w-auto" onClick={() => {
+            const values = form.getFieldsValue();
+            prev(values);
+          }}>
             Kembali
           </Button>
           <Button

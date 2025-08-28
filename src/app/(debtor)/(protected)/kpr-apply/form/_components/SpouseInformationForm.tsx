@@ -123,10 +123,12 @@ export default function SpouseInformationForm() {
                         { required: true, message: "Nama lengkap wajib diisi" },
                       ]}
                     >
-                      <Input 
-                        size="large" 
-                        placeholder="Masukkan nama lengkap" 
-                        onKeyPress={(e) => /[0-9]/.test(e.key) && e.preventDefault()}
+                      <Input
+                        size="large"
+                        placeholder="Masukkan nama lengkap"
+                        onKeyPress={(e) =>
+                          /[0-9]/.test(e.key) && e.preventDefault()
+                        }
                       />
                     </Form.Item>
                   </Col>
@@ -225,7 +227,9 @@ export default function SpouseInformationForm() {
                         size="large"
                         placeholder="Masukkan NIK"
                         maxLength={16}
-                        onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
+                        onKeyPress={(e) =>
+                          !/[0-9]/.test(e.key) && e.preventDefault()
+                        }
                       />
                     </Form.Item>
                   </Col>
@@ -244,7 +248,9 @@ export default function SpouseInformationForm() {
                         size="large"
                         placeholder="Masukkan NPWP (opsional)"
                         maxLength={15}
-                        onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
+                        onKeyPress={(e) =>
+                          !/[0-9]/.test(e.key) && e.preventDefault()
+                        }
                       />
                     </Form.Item>
                   </Col>
@@ -312,9 +318,19 @@ export default function SpouseInformationForm() {
         </Form.Item>
 
         <div className="flex justify-between mt-6">
-          <Button size="large" className="px-8" onClick={prev}>
+          <Button
+            size="large"
+            className="px-8"
+            onClick={() => {
+              const values = form.getFieldsValue();
+              const { is_married, ...spouseData } = values;
+              const spouseInfo = is_married ? spouseData : null;
+              prev({ is_married, spouse_information: spouseInfo });
+            }}
+          >
             Kembali
           </Button>
+
           <Button
             type="primary"
             size="large"

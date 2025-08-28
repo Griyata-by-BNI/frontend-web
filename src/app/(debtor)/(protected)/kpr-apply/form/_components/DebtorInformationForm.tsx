@@ -386,8 +386,10 @@ export default function DebtorInformationForm() {
                 const sameAsKtp = getFieldValue("same_as_ktp");
                 const idCardAddress = getFieldValue("id_card_address");
 
-                if (sameAsKtp) {
-                  setFieldsValue({ domicile_address: idCardAddress || "" });
+                if (sameAsKtp && idCardAddress) {
+                  setTimeout(() => {
+                    setFieldsValue({ domicile_address: idCardAddress });
+                  }, 0);
                 }
 
                 return null;
@@ -479,7 +481,10 @@ export default function DebtorInformationForm() {
         </Row>
 
         <div className="flex justify-between mt-6">
-          <Button size="large" className="px-8" onClick={prev}>
+          <Button size="large" className="px-8" onClick={() => {
+            const values = form.getFieldsValue();
+            prev(values);
+          }}>
             Kembali
           </Button>
           <Button
