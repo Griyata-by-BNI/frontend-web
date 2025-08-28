@@ -123,7 +123,11 @@ export default function SpouseInformationForm() {
                         { required: true, message: "Nama lengkap wajib diisi" },
                       ]}
                     >
-                      <Input size="large" placeholder="Masukkan nama lengkap" />
+                      <Input 
+                        size="large" 
+                        placeholder="Masukkan nama lengkap" 
+                        onKeyPress={(e) => /[0-9]/.test(e.key) && e.preventDefault()}
+                      />
                     </Form.Item>
                   </Col>
 
@@ -221,6 +225,7 @@ export default function SpouseInformationForm() {
                         size="large"
                         placeholder="Masukkan NIK"
                         maxLength={16}
+                        onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
                       />
                     </Form.Item>
                   </Col>
@@ -239,6 +244,7 @@ export default function SpouseInformationForm() {
                         size="large"
                         placeholder="Masukkan NPWP (opsional)"
                         maxLength={15}
+                        onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
                       />
                     </Form.Item>
                   </Col>

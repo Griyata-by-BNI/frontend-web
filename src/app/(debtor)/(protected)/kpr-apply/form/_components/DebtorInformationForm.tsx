@@ -141,7 +141,11 @@ export default function DebtorInformationForm() {
               name="full_name"
               rules={[{ required: true, message: "Nama lengkap wajib diisi" }]}
             >
-              <Input size="large" placeholder="Masukkan nama lengkap" />
+              <Input 
+                size="large" 
+                placeholder="Masukkan nama lengkap" 
+                onKeyPress={(e) => /[0-9]/.test(e.key) && e.preventDefault()}
+              />
             </Form.Item>
           </Col>
 
@@ -155,7 +159,12 @@ export default function DebtorInformationForm() {
                 { len: 16, message: "NIK harus 16 digit" },
               ]}
             >
-              <Input size="large" placeholder="Masukkan NIK" maxLength={16} />
+              <Input 
+                size="large" 
+                placeholder="Masukkan NIK" 
+                maxLength={16}
+                onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
+              />
             </Form.Item>
           </Col>
 
@@ -173,6 +182,7 @@ export default function DebtorInformationForm() {
                 size="large"
                 placeholder="Masukkan NPWP (opsional)"
                 maxLength={15}
+                onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
               />
             </Form.Item>
           </Col>
@@ -186,7 +196,11 @@ export default function DebtorInformationForm() {
                 { required: true, message: "Nama ibu kandung wajib diisi" },
               ]}
             >
-              <Input size="large" placeholder="Masukkan nama ibu kandung" />
+              <Input 
+                size="large" 
+                placeholder="Masukkan nama ibu kandung" 
+                onKeyPress={(e) => /[0-9]/.test(e.key) && e.preventDefault()}
+              />
             </Form.Item>
           </Col>
 
@@ -390,7 +404,11 @@ export default function DebtorInformationForm() {
               name="emergency_contact_name"
               rules={[{ required: true, message: "Nama lengkap wajib diisi" }]}
             >
-              <Input size="large" placeholder="Masukkan nama lengkap" />
+              <Input 
+                size="large" 
+                placeholder="Masukkan nama lengkap" 
+                onKeyPress={(e) => /[0-9]/.test(e.key) && e.preventDefault()}
+              />
             </Form.Item>
           </Col>
 
