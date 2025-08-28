@@ -174,11 +174,7 @@ export default function DebtorInformationForm() {
                 { pattern: /^\d{15}$/, message: "NPWP hanya boleh angka" },
               ]}
             >
-              <Input
-                size="large"
-                placeholder="Masukkan NPWP (opsional)"
-                maxLength={15}
-              />
+              <Input size="large" placeholder="Masukkan NPWP " maxLength={15} />
             </Form.Item>
           </Col>
 
