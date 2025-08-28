@@ -43,6 +43,12 @@ const relationshipOptions = [
   { value: "Pasangan", label: "Pasangan" },
 ];
 
+// Regex helper:
+// - Hanya huruf spasi dan karakter nama umum (.'-)
+const NAME_REGEX = /^[A-Za-z\s'.-]+$/;
+// - Hanya angka (1+ digit)
+const DIGITS_REGEX = /^\d+$/;
+
 export default function DebtorInformationForm() {
   const [form] = Form.useForm();
   const [isFormValid, setIsFormValid] = useState(false);
@@ -128,13 +134,17 @@ export default function DebtorInformationForm() {
               className="!mb-3 md:!mb-4"
               label="Nama Lengkap"
               name="full_name"
-              rules={[{ required: true, message: "Nama lengkap wajib diisi" }]}
+              rules={[
+                { required: true, message: "Nama lengkap wajib diisi" },
+                {
+                  pattern: NAME_REGEX,
+                  message:
+                    "Nama hanya boleh berisi huruf, spasi, titik, apostrof, atau tanda hubung",
+                },
+                { whitespace: true, message: "Tidak boleh hanya spasi" },
+              ]}
             >
-              <Input
-                size="large"
-                placeholder="Masukkan nama lengkap"
-                onKeyPress={(e) => /[0-9]/.test(e.key) && e.preventDefault()}
-              />
+              <Input size="large" placeholder="Masukkan nama lengkap" />
             </Form.Item>
           </Col>
 
@@ -146,14 +156,10 @@ export default function DebtorInformationForm() {
               rules={[
                 { required: true, message: "NIK wajib diisi" },
                 { len: 16, message: "NIK harus 16 digit" },
+                { pattern: /^\d{16}$/, message: "NIK hanya boleh angka" },
               ]}
             >
-              <Input
-                size="large"
-                placeholder="Masukkan NIK"
-                maxLength={16}
-                onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
-              />
+              <Input size="large" placeholder="Masukkan NIK" maxLength={16} />
             </Form.Item>
           </Col>
 
@@ -165,13 +171,13 @@ export default function DebtorInformationForm() {
               rules={[
                 { required: true, message: "NPWP wajib diisi" },
                 { len: 15, message: "NPWP harus 15 digit" },
+                { pattern: /^\d{15}$/, message: "NPWP hanya boleh angka" },
               ]}
             >
               <Input
                 size="large"
                 placeholder="Masukkan NPWP (opsional)"
                 maxLength={15}
-                onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
               />
             </Form.Item>
           </Col>
@@ -183,13 +189,15 @@ export default function DebtorInformationForm() {
               name="mother_maiden_name"
               rules={[
                 { required: true, message: "Nama ibu kandung wajib diisi" },
+                {
+                  pattern: NAME_REGEX,
+                  message:
+                    "Nama hanya boleh berisi huruf, spasi, titik, apostrof, atau tanda hubung",
+                },
+                { whitespace: true, message: "Tidak boleh hanya spasi" },
               ]}
             >
-              <Input
-                size="large"
-                placeholder="Masukkan nama ibu kandung"
-                onKeyPress={(e) => /[0-9]/.test(e.key) && e.preventDefault()}
-              />
+              <Input size="large" placeholder="Masukkan nama ibu kandung" />
             </Form.Item>
           </Col>
 
@@ -202,7 +210,8 @@ export default function DebtorInformationForm() {
                 { required: true, message: "Nomor handphone wajib diisi" },
                 {
                   pattern: /^08[0-9]{8,11}$/,
-                  message: "Format nomor handphone tidak valid",
+                  message:
+                    "Format nomor handphone tidak valid (harus mulai 08 dan 10–13 digit)",
                 },
               ]}
             >
@@ -229,7 +238,15 @@ export default function DebtorInformationForm() {
               className="!mb-3 md:!mb-4"
               label="Tempat Lahir"
               name="place_of_birth"
-              rules={[{ required: true, message: "Tempat lahir wajib diisi" }]}
+              rules={[
+                { required: true, message: "Tempat lahir wajib diisi" },
+                {
+                  pattern: NAME_REGEX,
+                  message:
+                    "Tempat lahir hanya boleh berisi huruf, spasi, titik, apostrof, atau tanda hubung",
+                },
+                { whitespace: true, message: "Tidak boleh hanya spasi" },
+              ]}
             >
               <Input size="large" placeholder="Masukkan tempat lahir" />
             </Form.Item>
@@ -315,6 +332,7 @@ export default function DebtorInformationForm() {
               name="id_card_address"
               rules={[
                 { required: true, message: "Alamat sesuai KTP wajib diisi" },
+                { whitespace: true, message: "Tidak boleh hanya spasi" },
               ]}
             >
               <Input.TextArea
@@ -365,6 +383,10 @@ export default function DebtorInformationForm() {
                           required: true,
                           message: "Alamat sesuai domisili wajib diisi",
                         },
+                        {
+                          whitespace: true,
+                          message: "Tidak boleh hanya spasi",
+                        },
                       ]}
                     >
                       <Input.TextArea
@@ -409,13 +431,17 @@ export default function DebtorInformationForm() {
               className="!mb-3 md:!mb-4"
               label="Nama Lengkap"
               name="emergency_contact_name"
-              rules={[{ required: true, message: "Nama lengkap wajib diisi" }]}
+              rules={[
+                { required: true, message: "Nama lengkap wajib diisi" },
+                {
+                  pattern: NAME_REGEX,
+                  message:
+                    "Nama hanya boleh berisi huruf, spasi, titik, apostrof, atau tanda hubung",
+                },
+                { whitespace: true, message: "Tidak boleh hanya spasi" },
+              ]}
             >
-              <Input
-                size="large"
-                placeholder="Masukkan nama lengkap"
-                onKeyPress={(e) => /[0-9]/.test(e.key) && e.preventDefault()}
-              />
+              <Input size="large" placeholder="Masukkan nama lengkap" />
             </Form.Item>
           </Col>
 
@@ -441,6 +467,7 @@ export default function DebtorInformationForm() {
               name="emergency_contact_home_phone"
               rules={[
                 { required: true, message: "Nomor telepon rumah wajib diisi" },
+                { pattern: DIGITS_REGEX, message: "Hanya boleh angka" },
               ]}
             >
               <Input size="large" placeholder="Masukkan nomor telepon rumah" />
@@ -456,7 +483,8 @@ export default function DebtorInformationForm() {
                 { required: true, message: "Nomor handphone wajib diisi" },
                 {
                   pattern: /^08[0-9]{8,11}$/,
-                  message: "Format nomor handphone tidak valid",
+                  message:
+                    "Format nomor handphone tidak valid (harus mulai 08 dan 10–13 digit)",
                 },
               ]}
             >
@@ -469,7 +497,10 @@ export default function DebtorInformationForm() {
               className="!mb-3 md:!mb-4"
               label="Alamat"
               name="emergency_contact_address"
-              rules={[{ required: true, message: "Alamat wajib diisi" }]}
+              rules={[
+                { required: true, message: "Alamat wajib diisi" },
+                { whitespace: true, message: "Tidak boleh hanya spasi" },
+              ]}
             >
               <Input.TextArea
                 size="large"
@@ -481,10 +512,14 @@ export default function DebtorInformationForm() {
         </Row>
 
         <div className="flex justify-between mt-6">
-          <Button size="large" className="px-8" onClick={() => {
-            const values = form.getFieldsValue();
-            prev(values);
-          }}>
+          <Button
+            size="large"
+            className="px-8"
+            onClick={() => {
+              const values = form.getFieldsValue();
+              prev(values);
+            }}
+          >
             Kembali
           </Button>
           <Button

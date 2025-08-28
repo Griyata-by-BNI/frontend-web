@@ -34,6 +34,7 @@ export function useSubmitAllKpr() {
 
     try {
       const detailPayload = buildKprDetailPayload(formData, propertyId);
+      console.log(detailPayload, "payloadd");
       const res = await addDetail.mutateAsync(detailPayload);
 
       const submissionPayload = buildKprSubmissionPayload(formData, res.data, {
