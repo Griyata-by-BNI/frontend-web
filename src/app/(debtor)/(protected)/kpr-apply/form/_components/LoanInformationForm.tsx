@@ -24,8 +24,14 @@ export default function LoanInformationForm() {
     () => (property?.price ? Number(property.price) * 0.9 : undefined),
     [property?.price]
   );
+
   const minDownPayment = useMemo(
     () => (property?.price ? Number(property.price) * 0.1 : undefined),
+    [property?.price]
+  );
+
+  const maxDownPayment = useMemo(
+    () => (property?.price ? Number(property.price) * 0.8 : undefined),
     [property?.price]
   );
 
@@ -139,6 +145,17 @@ export default function LoanInformationForm() {
                         type: "number" as const,
                         message: `Uang muka minimal 10% dari harga rumah (Rp ${Math.floor(
                           minDownPayment
+                        ).toLocaleString("id-ID")})`,
+                      },
+                    ]
+                  : []),
+                ...(maxDownPayment
+                  ? [
+                      {
+                        max: maxDownPayment,
+                        type: "number" as const,
+                        message: `Uang muka maksimal 80% dari harga rumah (Rp ${Math.floor(
+                          maxDownPayment
                         ).toLocaleString("id-ID")})`,
                       },
                     ]

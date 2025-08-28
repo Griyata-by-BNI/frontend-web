@@ -42,6 +42,11 @@ export default function SpouseInformationForm() {
     { value: "P", label: "Perempuan" },
   ];
 
+  // Regex util
+  const NAME_REGEX = /^[A-Za-z\s'.-]+$/; // huruf, spasi, titik, apostrof, tanda hubung
+  const DIGITS_16 = /^\d{16}$/;
+  const DIGITS_15 = /^\d{15}$/;
+
   const checkFormValidity = () => {
     const values = form.getFieldsValue();
     const isMarried = values.is_married;
@@ -121,6 +126,15 @@ export default function SpouseInformationForm() {
                       name="full_name"
                       rules={[
                         { required: true, message: "Nama lengkap wajib diisi" },
+                        {
+                          pattern: NAME_REGEX,
+                          message:
+                            "Nama hanya boleh berisi huruf, spasi, titik, apostrof, atau tanda hubung",
+                        },
+                        {
+                          whitespace: true,
+                          message: "Tidak boleh hanya spasi",
+                        },
                       ]}
                     >
                       <Input size="large" placeholder="Masukkan nama lengkap" />
@@ -178,6 +192,15 @@ export default function SpouseInformationForm() {
                           required: true,
                           message: "Kewarganegaraan wajib diisi",
                         },
+                        {
+                          pattern: NAME_REGEX,
+                          message:
+                            "Hanya huruf, spasi, titik, apostrof, atau tanda hubung",
+                        },
+                        {
+                          whitespace: true,
+                          message: "Tidak boleh hanya spasi",
+                        },
                       ]}
                     >
                       <Input
@@ -214,7 +237,10 @@ export default function SpouseInformationForm() {
                       name="nik"
                       rules={[
                         { required: true, message: "NIK wajib diisi" },
-                        { len: 16, message: "NIK harus 16 digit" },
+                        {
+                          pattern: DIGITS_16,
+                          message: "NIK harus 16 digit angka",
+                        },
                       ]}
                     >
                       <Input
@@ -232,7 +258,10 @@ export default function SpouseInformationForm() {
                       name="tax_id_number"
                       rules={[
                         { required: true, message: "NPWP wajib diisi" },
-                        { len: 15, message: "NPWP harus 15 digit" },
+                        {
+                          pattern: DIGITS_15,
+                          message: "NPWP harus 15 digit angka",
+                        },
                       ]}
                     >
                       <Input
@@ -255,7 +284,8 @@ export default function SpouseInformationForm() {
                         },
                         {
                           pattern: /^08[0-9]{8,11}$/,
-                          message: "Format nomor handphone tidak valid",
+                          message:
+                            "Format tidak valid (harus mulai 08 dan total 10–13 digit)",
                         },
                       ]}
                     >
@@ -290,6 +320,10 @@ export default function SpouseInformationForm() {
                           required: true,
                           message: "Alamat sesuai KTP wajib diisi",
                         },
+                        {
+                          whitespace: true,
+                          message: "Tidak boleh hanya spasi",
+                        },
                       ]}
                     >
                       <Input.TextArea
@@ -306,9 +340,19 @@ export default function SpouseInformationForm() {
         </Form.Item>
 
         <div className="flex justify-between mt-6">
-          <Button size="large" className="px-8" onClick={prev}>
+          <Button
+            size="large"
+            className="px-8"
+            onClick={() => {
+              const values = form.getFieldsValue();
+              const { is_married, ...spouseData } = values;
+              const spouseInfo = is_married ? spouseData : null;
+              prev({ is_married, spouse_information: spouseInfo });
+            }}
+          >
             Kembali
           </Button>
+
           <Button
             type="primary"
             size="large"

@@ -8,9 +8,16 @@ import {
   Tag,
   Form,
   Checkbox,
-  App,
+  Modal,
 } from "antd";
-import { useState } from "react";
+import {
+  EyeOutlined,
+  ExclamationCircleOutlined,
+  ClockCircleOutlined,
+  CloudUploadOutlined,
+  FileDoneOutlined,
+} from "@ant-design/icons";
+import { useState, useMemo } from "react";
 import { useKprApplyStore } from "@/stores/useKprApplyStore";
 import { useShallow } from "zustand/react/shallow";
 import interestRateData from "@/data/interest-rate.json";
@@ -24,9 +31,10 @@ export default function SummaryForm() {
     }))
   );
 
-  const { modal } = App.useApp();
   const [form] = Form.useForm();
   const [canSubmit, setCanSubmit] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const formatCurrency = (value?: number) =>
     typeof value === "number"
@@ -43,10 +51,47 @@ export default function SummaryForm() {
     return isNaN(dt.getTime()) ? "-" : dt.toLocaleDateString("id-ID");
   };
 
-  const yesNoTag = (ok: boolean) => (
-    <Tag color={ok ? "green" : "red"}>
-      {ok ? "Sudah diunggah" : "Belum diunggah"}
-    </Tag>
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+
+  const handlePreview = (files: any[], title: string) => {
+    if (files && files.length > 0) {
+      const file = files[0];
+      let url = file.url;
+      if (!url && file.originFileObj && file.originFileObj instanceof File) {
+        url = URL.createObjectURL(file.originFileObj);
+      }
+      if (url) {
+        const isPdf =
+          file.type === "application/pdf" || url.toLowerCase().includes(".pdf");
+        if (isPdf) {
+          window.open(url, "_blank");
+        } else {
+          setPreviewUrl(url);
+          setPreviewTitle(title);
+          setPreviewVisible(true);
+        }
+      }
+    }
+  };
+
+  const yesNoTag = (ok: boolean, files?: any[], title?: string) => (
+    <div className="flex items-center gap-2">
+      <Tag color={ok ? "green" : "red"}>
+        {ok ? "Sudah diunggah" : "Belum diunggah"}
+      </Tag>
+      {ok && files && files.length > 0 && (
+        <Button
+          type="link"
+          size="small"
+          icon={<EyeOutlined />}
+          onClick={() => handlePreview(files, title || "Dokumen")}
+        >
+          Preview
+        </Button>
+      )}
+    </div>
   );
 
   const hasEmploymentHistory =
@@ -72,29 +117,40 @@ export default function SummaryForm() {
 
   const { submitAll } = useSubmitAllKpr();
 
-  const handleSubmit = async () => {
-    modal.confirm({
-      title: "Konfirmasi Pengajuan",
-      icon: <></>,
-      okText: "Kirim Pengajuan",
-      cancelText: "Periksa Kembali",
-      okButtonProps: { type: "primary" },
-      content: (
-        <div className="flex flex-col gap-2 text-[13px] leading-5 mb-4">
-          <p>
-            Apakah Anda sudah <b>YAKIN</b> dengan seluruh informasi yang Anda
-            isi dan dokumen yang Anda unggah?
-          </p>
-          <p className="text-red-500">
-            Setelah pengajuan dikirim, Anda tidak dapat mengubah data pengajuan.
-          </p>
-        </div>
-      ),
-      onOk: async () => {
-        await submitAll(formData);
-      },
-    });
+  const handleSubmit = () => {
+    // Buka modal konfirmasi kustom
+    setConfirmOpen(true);
   };
+
+  const onConfirmSubmit = async () => {
+    try {
+      setSubmitting(true);
+      await submitAll(formData);
+      setConfirmOpen(false);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Ringkas info dokumen (untuk tampilan modal)
+  const { totalDocs, uploadedDocs } = useMemo(() => {
+    const groups: any[] = [
+      formData?.id_card,
+      formData?.tax_id,
+      formData?.employment_certificate,
+      formData?.salary_slip,
+      ...(formData?.is_married
+        ? [formData?.spouse_id_card, formData?.marriage_certificate]
+        : []),
+    ].filter(Boolean);
+
+    const total = groups.length;
+    const uploaded = groups.filter(
+      (g) => Array.isArray(g) && g.length > 0
+    ).length;
+
+    return { totalDocs: total, uploadedDocs: uploaded };
+  }, [formData]);
 
   // ====== Responsive helpers
   const labelWidth = "clamp(120px, 35vw, 220px)";
@@ -111,7 +167,7 @@ export default function SummaryForm() {
       <Card
         title={<p className="text-sm">Ringkasan Pengajuan</p>}
         className="!border-[#d9d9d9] [&_.ant-card-head]:!border-[#d9d9d9]"
-        styles={{ body: { padding: 16 } }} // ✅ ganti bodyStyle -> styles.body
+        styles={{ body: { padding: 16 } }}
       >
         <Row gutter={[gutterH, gutterV]}>
           <Col span={24}>
@@ -191,7 +247,6 @@ export default function SummaryForm() {
                 </Descriptions.Item>
               </Descriptions>
 
-              {/* Full-width rows (tanpa span, pakai column=1) */}
               <Descriptions
                 bordered
                 size="middle"
@@ -439,25 +494,33 @@ export default function SummaryForm() {
                 <Descriptions.Item label="KTP">
                   {yesNoTag(
                     Array.isArray(formData?.id_card) &&
-                      formData.id_card.length > 0
+                      formData.id_card.length > 0,
+                    formData?.id_card,
+                    "KTP"
                   )}
                 </Descriptions.Item>
                 <Descriptions.Item label="NPWP">
                   {yesNoTag(
                     Array.isArray(formData?.tax_id) &&
-                      formData.tax_id.length > 0
+                      formData.tax_id.length > 0,
+                    formData?.tax_id,
+                    "NPWP"
                   )}
                 </Descriptions.Item>
                 <Descriptions.Item label="Sertifikat Pekerjaan">
                   {yesNoTag(
                     Array.isArray(formData?.employment_certificate) &&
-                      formData.employment_certificate.length > 0
+                      formData.employment_certificate.length > 0,
+                    formData?.employment_certificate,
+                    "Sertifikat Pekerjaan"
                   )}
                 </Descriptions.Item>
                 <Descriptions.Item label="Slip Gaji">
                   {yesNoTag(
                     Array.isArray(formData?.salary_slip) &&
-                      formData.salary_slip.length > 0
+                      formData.salary_slip.length > 0,
+                    formData?.salary_slip,
+                    "Slip Gaji"
                   )}
                 </Descriptions.Item>
                 {formData?.is_married && (
@@ -465,13 +528,17 @@ export default function SummaryForm() {
                     <Descriptions.Item label="KTP Pasangan">
                       {yesNoTag(
                         Array.isArray(formData?.spouse_id_card) &&
-                          formData.spouse_id_card.length > 0
+                          formData.spouse_id_card.length > 0,
+                        formData?.spouse_id_card,
+                        "KTP Pasangan"
                       )}
                     </Descriptions.Item>
                     <Descriptions.Item label="Buku Nikah">
                       {yesNoTag(
                         Array.isArray(formData?.marriage_certificate) &&
-                          formData.marriage_certificate.length > 0
+                          formData?.marriage_certificate.length > 0,
+                        formData?.marriage_certificate,
+                        "Buku Nikah"
                       )}
                     </Descriptions.Item>
                   </>
@@ -512,7 +579,14 @@ export default function SummaryForm() {
 
         {/* CTA */}
         <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <Button size="large" className="px-6 w-full md:w-auto" onClick={prev}>
+          <Button
+            size="large"
+            className="px-6 w-full md:w-auto"
+            onClick={() => {
+              const values = form.getFieldsValue();
+              prev(values);
+            }}
+          >
             Kembali
           </Button>
           <Button
@@ -526,6 +600,131 @@ export default function SummaryForm() {
           </Button>
         </div>
       </Card>
+
+      {/* Modal Preview Gambar */}
+      <Modal
+        open={previewVisible}
+        title={previewTitle}
+        footer={null}
+        onCancel={() => setPreviewVisible(false)}
+        width={800}
+        centered
+        destroyOnClose
+      >
+        <div className="flex justify-center">
+          <img
+            src={previewUrl}
+            alt={previewTitle}
+            style={{ maxWidth: "100%", maxHeight: "70vh" }}
+          />
+        </div>
+      </Modal>
+
+      {/* Modal Konfirmasi Pengajuan (lebih menarik) */}
+      <Modal
+        open={confirmOpen}
+        onCancel={!submitting ? () => setConfirmOpen(false) : undefined}
+        footer={
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 w-full">
+            <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500">
+              <ClockCircleOutlined />
+              <span>
+                Proses unggah dokumen memerlukan <b>± 1–5 menit</b> tergantung
+                ukuran file & koneksi internet.
+              </span>
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button
+                onClick={() => setConfirmOpen(false)}
+                disabled={submitting}
+              >
+                Periksa Kembali
+              </Button>
+              <Button
+                type="primary"
+                onClick={onConfirmSubmit}
+                loading={submitting}
+              >
+                Kirim Pengajuan
+              </Button>
+            </div>
+          </div>
+        }
+        width={720}
+        centered
+        destroyOnClose
+        closable={!submitting}
+        maskClosable={!submitting}
+        keyboard={!submitting}
+        title={
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-500 to-teal-600 text-white">
+              <ExclamationCircleOutlined />
+            </div>
+            <div className="leading-tight">
+              <div className="text-base font-semibold">
+                Konfirmasi Pengajuan
+              </div>
+              <div className="text-xs text-gray-500">
+                Pastikan data & dokumen sudah benar
+              </div>
+            </div>
+          </div>
+        }
+      >
+        <div className="space-y-4">
+          {/* Highlight waktu proses */}
+          <div className="rounded-xl border border-teal-200/70 bg-teal-50 p-3 flex items-start gap-3">
+            <div className="mt-0.5">
+              <ClockCircleOutlined className="text-teal-600" />
+            </div>
+            <div className="text-sm">
+              <div className="font-medium text-teal-700">
+                Estimasi proses unggah: <b>± 1–5 menit</b>
+              </div>
+              <div className="text-gray-600">
+                Jangan menutup halaman ini saat proses berlangsung.
+              </div>
+            </div>
+          </div>
+
+          {/* Ringkasan cepat */}
+          <div className="rounded-xl border p-3">
+            <div className="flex items-center gap-2 mb-2">
+              <CloudUploadOutlined />
+              <div className="text-sm font-medium">
+                Ringkasan dokumen:{" "}
+                <span className="text-gray-600">
+                  {uploadedDocs}/{totalDocs} kategori terunggah
+                </span>
+              </div>
+            </div>
+            <ul className="text-sm text-gray-700 list-disc pl-5 space-y-1">
+              <li>
+                Periksa kembali <b>ringkasan data</b> di halaman ini.
+              </li>
+              <li>
+                Pastikan foto dokumen <b>terbaca jelas</b> (tidak blur /
+                terpotong).
+              </li>
+              <li>
+                Gunakan koneksi internet yang <b>stabil</b>.
+              </li>
+            </ul>
+          </div>
+
+          {/* Peringatan tidak bisa diubah */}
+          <div className="rounded-xl border border-red-200 bg-red-50 p-3 flex items-start gap-3">
+            <div className="mt-0.5">
+              <FileDoneOutlined className="text-red-500" />
+            </div>
+            <div className="text-sm text-red-700">
+              Setelah pengajuan dikirim, Anda <b>tidak dapat mengubah</b> data
+              pengajuan.
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

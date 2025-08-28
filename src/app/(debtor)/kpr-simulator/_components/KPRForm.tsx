@@ -25,6 +25,12 @@ export const KPRForm = ({
   onTenorChange,
   onRateChange,
 }: KPRFormProps) => {
+  const minDownPayment = propertyPrice * 0.1;
+  const maxDownPayment = propertyPrice * 0.8;
+
+  const isDownPaymentValid =
+    downPayment >= minDownPayment && downPayment <= maxDownPayment;
+
   return (
     <div className="flex flex-col w-full gap-4">
       <div className="flex flex-col w-full gap-2">
@@ -35,9 +41,9 @@ export const KPRForm = ({
           className="!w-full"
           prefix={<p className="font-semibold text-dark-tosca">Rp</p>}
           formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
           }
-          parser={(value) => Number(value!.replace(/\$\s?|(,*)/g, ""))}
+          parser={(value) => Number(value!.replace(/\Rp\s?|(\.)/g, ""))}
           value={propertyPrice}
           onChange={(value) => onPropertyPriceChange(value || 0)}
         />
@@ -51,12 +57,22 @@ export const KPRForm = ({
           className="!w-full"
           prefix={<p className="font-semibold text-dark-tosca">Rp</p>}
           formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
           }
-          parser={(value) => Number(value!.replace(/\$\s?|(,*)/g, ""))}
+          parser={(value) => Number(value!.replace(/\Rp\s?|(\.)/g, ""))}
           value={downPayment}
+          // min={minDownPayment}
+          max={propertyPrice}
+          status={!isDownPaymentValid ? "error" : ""}
           onChange={(value) => onDownPaymentChange(value || 0)}
         />
+
+        {!isDownPaymentValid && (
+          <div className="text-red-500 text-sm">
+            Uang muka minimal 10% (Rp {minDownPayment.toLocaleString("id-ID")})
+            dan maksimal 80% dari harga properti
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col w-full gap-2">

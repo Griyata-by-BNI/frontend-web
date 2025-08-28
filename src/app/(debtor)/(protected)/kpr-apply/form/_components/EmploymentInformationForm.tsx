@@ -45,6 +45,9 @@ export default function EmploymentInformationForm() {
     { value: "Konstruksi", label: "Konstruksi" },
   ];
 
+  // Regex angka saja
+  const DIGITS_ONLY = /^\d+$/;
+
   const calculateTotalIncome = () => {
     const basicSalary = Number(form.getFieldValue("basic_salary") || 0);
     const otherIncome = Number(form.getFieldValue("other_income") || 0);
@@ -88,6 +91,11 @@ export default function EmploymentInformationForm() {
       next(values);
     } catch {}
   };
+
+  const formatThousand = (v?: string | number | null) =>
+    v === null || v === undefined || v === ""
+      ? ""
+      : String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
   return (
     <Form
@@ -158,6 +166,10 @@ export default function EmploymentInformationForm() {
                   required: true,
                   message: "Nomor telepon perusahaan wajib diisi",
                 },
+                {
+                  pattern: DIGITS_ONLY,
+                  message: "Nomor telepon hanya boleh berisi angka",
+                },
               ]}
             >
               <Input
@@ -217,7 +229,7 @@ export default function EmploymentInformationForm() {
               name="length_of_work_years"
               rules={[
                 { required: true, message: "Lama bekerja wajib diisi" },
-                { min: 1, type: "number", message: "Minimal 1 tahun" },
+                { type: "number", min: 1, message: "Minimal 1 tahun" },
               ]}
             >
               <InputNumber
@@ -242,10 +254,7 @@ export default function EmploymentInformationForm() {
                 size="large"
                 placeholder="Masukkan gaji pokok"
                 prefix={<p className="font-semibold text-dark-tosca">Rp</p>}
-                formatter={(value) => {
-                  if (value === null || value === undefined) return "";
-                  return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                }}
+                formatter={formatThousand}
                 parser={(value) => {
                   if (!value) return undefined as unknown as number;
                   return Number(value.replace(/[^0-9]/g, ""));
@@ -268,10 +277,7 @@ export default function EmploymentInformationForm() {
                 size="large"
                 placeholder="Masukkan penghasilan lain"
                 prefix={<p className="font-semibold text-dark-tosca">Rp</p>}
-                formatter={(value) => {
-                  if (value === null || value === undefined) return "";
-                  return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                }}
+                formatter={formatThousand}
                 parser={(value) => {
                   if (!value) return undefined as unknown as number;
                   return Number(value.replace(/[^0-9]/g, ""));
@@ -293,10 +299,7 @@ export default function EmploymentInformationForm() {
                 size="large"
                 disabled
                 prefix={<p className="font-semibold text-dark-tosca">Rp</p>}
-                formatter={(value) => {
-                  if (value === null || value === undefined) return "";
-                  return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                }}
+                formatter={formatThousand}
               />
             </Form.Item>
           </Col>
@@ -316,10 +319,7 @@ export default function EmploymentInformationForm() {
                 size="large"
                 placeholder="Masukkan total pengeluaran"
                 prefix={<p className="font-semibold text-dark-tosca">Rp</p>}
-                formatter={(value) => {
-                  if (value === null || value === undefined) return "";
-                  return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                }}
+                formatter={formatThousand}
                 parser={(value) => {
                   if (!value) return undefined as unknown as number;
                   return Number(value.replace(/[^0-9]/g, ""));
@@ -378,6 +378,12 @@ export default function EmploymentInformationForm() {
               className="!mb-3 md:!mb-4"
               label="Nomor Telepon Perusahaan"
               name={["employmentHistory", "phone_number"]}
+              rules={[
+                {
+                  pattern: DIGITS_ONLY,
+                  message: "Nomor telepon hanya boleh berisi angka",
+                },
+              ]}
             >
               <Input
                 size="large"
@@ -441,7 +447,14 @@ export default function EmploymentInformationForm() {
         </Row>
 
         <div className="flex justify-between mt-6">
-          <Button size="large" className="px-8" onClick={prev}>
+          <Button
+            size="large"
+            className="px-8"
+            onClick={() => {
+              const values = form.getFieldsValue();
+              prev(values);
+            }}
+          >
             Kembali
           </Button>
 

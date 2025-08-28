@@ -1,14 +1,17 @@
 "use client";
 import "@ant-design/v5-patch-for-react-19";
-import { Card, Form, Upload, Button, Row, Col, message } from "antd";
+import { Card, Form, Upload, Button, Row, Col, App } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
 import type { UploadProps } from "antd";
 import { useKprApplyStore } from "@/stores/useKprApplyStore";
 import { useShallow } from "zustand/react/shallow";
 
+const MAX_MB = 5;
+
 export default function DocumentUploadForm() {
   const [form] = Form.useForm();
+  const { message } = App.useApp();
   const [isFormValid, setIsFormValid] = useState(false);
   const [isMarried, setIsMarried] = useState(false);
 
@@ -20,9 +23,14 @@ export default function DocumentUploadForm() {
     }))
   );
 
+  // (opsional) hardening tambahan saat normalisasi
   const normalizeFileList = (e: any) => {
-    if (Array.isArray(e)) return e;
-    return e?.fileList ?? [];
+    const list = Array.isArray(e) ? e : e?.fileList ?? [];
+    // buang file yg melebihi size (jika masuk dari drag/drop aneh)
+    return list.filter(
+      (f: any) =>
+        !f.originFileObj || f.originFileObj.size / 1024 / 1024 < MAX_MB
+    );
   };
 
   const uploadProps: UploadProps = useMemo(
@@ -32,19 +40,31 @@ export default function DocumentUploadForm() {
           file.type === "image/jpeg" ||
           file.type === "image/png" ||
           file.type === "application/pdf";
+
         if (!isValidType) {
-          message.error("File harus berformat JPG, PNG, atau PDF!");
-          return false;
+          message.error("File harus berformat JPG, PNG, JPEG, atau PDF!");
+          // jangan masukkan ke fileList
+          return Upload.LIST_IGNORE;
         }
-        const isLt5M = file.size / 1024 / 1024 < 5;
-        if (!isLt5M) {
-          message.error("Ukuran file maksimal 5MB!");
-          return false;
+
+        const isLtMax = file.size / 1024 / 1024 < MAX_MB;
+        if (!isLtMax) {
+          message.error(`Ukuran file maksimal ${MAX_MB}MB!`);
+          // jangan masukkan ke fileList
+          return Upload.LIST_IGNORE;
         }
+
+        // return false = tidak auto-upload, tapi tetap MASUK ke fileList
+        // kita mau tidak masuk fileList jika invalid; untuk valid biarkan masuk:
         return false;
       },
+      // batasi satu file per field
       maxCount: 1,
+      // batasi pilihan di dialog
+      accept: ".jpg,.jpeg,.png,.pdf",
       className: "[&_.ant-upload]:!w-full",
+      // (opsional) cegah preview default jika perlu
+      // onPreview: () => {}
     }),
     []
   );
@@ -207,7 +227,10 @@ export default function DocumentUploadForm() {
         </Row>
 
         <div className="flex justify-between mt-6">
-          <Button size="large" className="px-8" onClick={prev}>
+          <Button size="large" className="px-8" onClick={() => {
+            const values = form.getFieldsValue();
+            prev(values);
+          }}>
             Kembali
           </Button>
           <Button

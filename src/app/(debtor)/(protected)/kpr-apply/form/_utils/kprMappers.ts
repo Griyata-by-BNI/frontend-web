@@ -51,7 +51,7 @@ export function buildKprDetailPayload(
       education: formData.education,
       tax_id_number: formData.tax_id_number,
       email: formData.email,
-      phone_number: formData.phone_number,
+      phone_number: `${formData.phone_number ?? ""}`,
       id_card_address: formData.id_card_address,
       domicile_address: formData.same_as_ktp
         ? formData.id_card_address
@@ -126,6 +126,7 @@ export function buildKprDetailPayload(
     },
 
     loan_information: {
+      down_payment: Number(formData.downPayment ?? 0),
       property_id: Number(propertyId),
       loan_value: `${formData.loanAmount ?? ""}`,
       monthly_period: Number(formData.tenor ?? 0),
