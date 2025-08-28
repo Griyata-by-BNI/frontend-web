@@ -126,6 +126,7 @@ export function buildKprDetailPayload(
     },
 
     loan_information: {
+      down_payment: Number(formData.downPayment ?? 0),
       property_id: Number(propertyId),
       loan_value: `${formData.loanAmount ?? ""}`,
       monthly_period: Number(formData.tenor ?? 0),

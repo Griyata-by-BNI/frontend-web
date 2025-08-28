@@ -112,9 +112,9 @@ export const AffordabilityForm = ({
           className="!w-full"
           prefix={<p className="font-semibold text-dark-tosca">Rp</p>}
           formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
           }
-          parser={(value) => Number(value!.replace(/\$\s?|(,*)/g, ""))}
+          parser={(value) => Number(value!.replace(/\Rp\s?|(\.)/g, ""))}
           value={params.monthlyIncome}
           onChange={(value) => onParamsChange({ monthlyIncome: value || 0 })}
         />
@@ -130,9 +130,9 @@ export const AffordabilityForm = ({
           className="!w-full"
           prefix={<p className="font-semibold text-dark-tosca">Rp</p>}
           formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
           }
-          parser={(value) => Number(value!.replace(/\$\s?|(,*)/g, ""))}
+          parser={(value) => Number(value!.replace(/\Rp\s?|(\.)/g, ""))}
           value={params.monthlyExpenses}
           max={params.monthlyIncome}
           onChange={(value) => onParamsChange({ monthlyExpenses: value || 0 })}
@@ -187,9 +187,9 @@ export const AffordabilityForm = ({
           className="!w-full"
           prefix={<p className="font-semibold text-dark-tosca">Rp</p>}
           formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
           }
-          parser={(value) => Number(value!.replace(/\$\s?|(,*)/g, ""))}
+          parser={(value) => Number(value!.replace(/\Rp\s?|(\.)/g, ""))}
           value={params.downPayment}
           onChange={(value) => onParamsChange({ downPayment: value || 0 })}
         />
@@ -203,9 +203,9 @@ export const AffordabilityForm = ({
           className="!w-full"
           prefix={<p className="font-semibold text-dark-tosca">Rp</p>}
           formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
           }
-          parser={(value) => Number(value!.replace(/\$\s?|(,*)/g, ""))}
+          parser={(value) => Number(value!.replace(/\Rp\s?|(\.)/g, ""))}
           value={params.monthlyInstallment}
           onChange={(value) =>
             onParamsChange({ monthlyInstallment: value || 0 })

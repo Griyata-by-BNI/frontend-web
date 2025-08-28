@@ -75,6 +75,7 @@ export interface LoanInformation {
   property_id: number;
   loan_value: string | number;
   monthly_period: number;
+  down_payment: string | number;
 }
 
 export interface KprApplicationPayload {

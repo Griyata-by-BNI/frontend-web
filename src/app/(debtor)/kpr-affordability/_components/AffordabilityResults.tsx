@@ -85,7 +85,7 @@ export const AffordabilityResults = ({
               <Button 
                 type="primary" 
                 className="w-full"
-                onClick={() => router.push(`/explore?maxPrice=${affordablePrice}`)}
+                onClick={() => router.push(`/search?pricemax=${affordablePrice}`)}
               >
                 Cari Properti
               </Button>
