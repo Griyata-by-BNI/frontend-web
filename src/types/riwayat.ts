@@ -96,6 +96,11 @@ export interface LoanInformation {
   monthly_period: number;
 }
 
+export interface DocumentSubmission {
+  type: string;
+  url: string;
+}
+
 export interface SubmissionDetail {
   submission: {
     id: number;
@@ -110,6 +115,7 @@ export interface SubmissionDetail {
   emergency_contact: EmergencyContact;
   employee_information: EmployeeInformation;
   loan_information: LoanInformation;
+  documents: DocumentSubmission[];
 }
 
 export interface PropertyDetail {

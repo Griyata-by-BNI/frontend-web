@@ -1,5 +1,6 @@
 import { SubmissionDetail } from "@/types/riwayat";
 import { InfoCard } from "./InfoCard";
+import { DocumentsView } from "./DocumentsView";
 import { FileText, User, Users, Briefcase, Phone, Home } from "lucide-react";
 
 export const VerifikasiView = ({
@@ -67,7 +68,7 @@ export const VerifikasiView = ({
     { label: "Jangka Waktu", value: `${loan_information.monthly_period} bulan` },
   ];
 
-  const dataDokumen = ["KTP", "NPWP", "Kartu Keluarga", "Buku Nikah", "Slip Gaji", "Rekening Koran"];
+
 
   return (
     <div className="space-y-8">
@@ -103,19 +104,7 @@ export const VerifikasiView = ({
         icon={<FileText className="w-6 h-6 text-gray-500" />}
       />
       
-      <div className="bg-white p-6 rounded-xl shadow-lg">
-        <div className="flex items-center gap-4 mb-4">
-          <FileText className="w-6 h-6 text-gray-500" />
-          <h2 className="text-xl font-bold text-gray-800">Dokumen Terkirim</h2>
-        </div>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 list-inside list-disc marker:text-teal-500">
-          {dataDokumen.map((doc, index) => (
-            <li key={index} className="text-gray-700">
-              {doc}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <DocumentsView documents={submissionData.documents || []} />
     </div>
   );
 };

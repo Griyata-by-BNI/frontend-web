@@ -9,6 +9,7 @@ import { PengajuanKPRView } from "../../in-process/[id]/components/PengajuanKPRV
 import { VerifikasiView } from "../../in-process/[id]/components/VerifikasiView";
 import { HasilPengajuanView } from "./components/HasilPengajuanView";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { CustomBreadcrumb } from "@/components/CustomBreadcrumb";
 
 function CompletedPageContent() {
   const params = useParams();
@@ -32,6 +33,13 @@ function CompletedPageContent() {
       : "dalam_proses";
   const currentProgress = SUBMISSION_STEPS.HASIL;
   const [viewedStep, setViewedStep] = useState<number>(currentProgress);
+
+  const breadcrumbItems = [
+    { label: "Beranda", href: "/" },
+    { label: "Profil", href: "/profile" },
+    { label: "Riwayat Pengajuan", href: "/profile/riwayat" },
+    { label: "Detail Pengajuan" }
+  ];
 
   if (isNaN(id)) {
     return (
@@ -85,6 +93,7 @@ function CompletedPageContent() {
   return (
     <div className="bg-gradient-to-t from-white to-light-tosca min-h-screen p-4 sm:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
+        <CustomBreadcrumb items={breadcrumbItems} className="mb-6" />
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 py-6 border-b border-gray-100">
             <div className="flex justify-between items-center">
