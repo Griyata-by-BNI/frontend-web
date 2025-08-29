@@ -39,7 +39,7 @@ const RegisterForm: React.FC = ({}) => {
   const loading = status === "pending";
 
   return (
-    <div className="w-full max-w-md mx-auto bg-white p-6 my-8 md:my-12 sm:p-8 rounded-2xl shadow-2xl border border-gray-200">
+    <div className="w-full max-w-md mx-auto bg-white p-6 my-8 sm:p-8 rounded-2xl shadow-2xl border border-gray-200">
       <div className="text-center mb-6">
         <h3 className="text-xl sm:text-2xl font-bold text-teal-600 mb-2">
           Daftar Akun Griyata

@@ -21,9 +21,9 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({
         </Button>,
       ]}
       width={600}
-      className="max-h-[80vh] overflow-y-auto"
+      centered
     >
-      <div className="text-sm text-gray-600">
+      <div className="text-sm text-gray-600 max-h-[60vh] overflow-y-auto">
         <h4 className="text-base font-bold text-teal-600 mb-3">
           KEBIJAKAN APLIKASI
         </h4>
@@ -35,7 +35,9 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({
           membaca, memahami, dan menyetujui seluruh isi kebijakan ini.
         </p>
 
-        <h5 className="font-semibold text-gray-700 mb-2">1. Kebijakan Privasi</h5>
+        <h5 className="font-semibold text-gray-700 mb-2">
+          1. Kebijakan Privasi
+        </h5>
         <h6 className="font-medium mb-1">1.1. Informasi yang kami kumpulkan</h6>
         <p className="mb-2">
           Kami mengumpulkan informasi yang Anda berikan secara langsung atau
@@ -43,18 +45,18 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({
         </p>
         <ul className="list-disc pl-5 mb-3">
           <li>
-            <strong>Data Pribadi:</strong> Nama lengkap, Nomor Induk Kependudukan
-            (NIK), alamat, tanggal lahir, jenis kelamin, nomor telepon, alamat
-            email, dan data KTP atau dokumen identitas lainnya.
+            <strong>Data Pribadi:</strong> Nama lengkap, Nomor Induk
+            Kependudukan (NIK), alamat, tanggal lahir, jenis kelamin, nomor
+            telepon, alamat email, dan data KTP atau dokumen identitas lainnya.
           </li>
           <li>
-            <strong>Data Finansial:</strong> Informasi pendapatan, data keuangan,
-            riwayat pekerjaan, dan data lain yang diperlukan untuk proses analisis
-            dan persetujuan pengajuan KPR.
+            <strong>Data Finansial:</strong> Informasi pendapatan, data
+            keuangan, riwayat pekerjaan, dan data lain yang diperlukan untuk
+            proses analisis dan persetujuan pengajuan KPR.
           </li>
           <li>
-            <strong>Data Properti:</strong> Informasi mengenai properti yang Anda
-            cari atau ajukan, seperti lokasi, harga, jenis, dan spesifikasi
+            <strong>Data Properti:</strong> Informasi mengenai properti yang
+            Anda cari atau ajukan, seperti lokasi, harga, jenis, dan spesifikasi
             lainnya.
           </li>
           <li>
@@ -63,8 +65,8 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({
             perangkat, dan data log aktivitas Anda dalam aplikasi.
           </li>
           <li>
-            <strong>Data Lokasi:</strong> Informasi geografis yang kami kumpulkan
-            jika Anda mengaktifkan fitur pencarian lokasi sekitar.
+            <strong>Data Lokasi:</strong> Informasi geografis yang kami
+            kumpulkan jika Anda mengaktifkan fitur pencarian lokasi sekitar.
           </li>
         </ul>
 
@@ -79,12 +81,12 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({
             Griyata by BNI.
           </li>
           <li>
-            Berkomunikasi dengan Anda mengenai status pengajuan, informasi produk,
-            dan pembaruan layanan.
+            Berkomunikasi dengan Anda mengenai status pengajuan, informasi
+            produk, dan pembaruan layanan.
           </li>
           <li>
-            Meningkatkan, mengembangkan, dan mempersonalisasi pengalaman Anda saat
-            menggunakan aplikasi.
+            Meningkatkan, mengembangkan, dan mempersonalisasi pengalaman Anda
+            saat menggunakan aplikasi.
           </li>
           <li>
             Melakukan riset, analisis, dan statistik untuk pengembangan bisnis
@@ -112,8 +114,8 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({
             sama dengan kami.
           </li>
           <li>
-            <strong>Lembaga Hukum:</strong> Jika diwajibkan oleh hukum, peraturan,
-            atau perintah pengadilan yang sah.
+            <strong>Lembaga Hukum:</strong> Jika diwajibkan oleh hukum,
+            peraturan, atau perintah pengadilan yang sah.
           </li>
         </ul>
         <p className="mb-3">
@@ -125,8 +127,8 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({
         <h6 className="font-medium mb-1">1.4. Keamanan Informasi</h6>
         <p className="mb-3">
           Kami menerapkan langkah-langkah keamanan teknis dan administratif yang
-          memadai untuk melindungi informasi Anda dari akses tidak sah, kerusakan,
-          atau penyalahgunaan.
+          memadai untuk melindungi informasi Anda dari akses tidak sah,
+          kerusakan, atau penyalahgunaan.
         </p>
 
         <h5 className="font-semibold text-gray-700 mb-2">
@@ -140,21 +142,22 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({
           </li>
           <li>
             Anda bertanggung jawab penuh atas kerahasiaan dan penggunaan akun
-            Anda. Segala aktivitas yang terjadi melalui akun Anda menjadi tanggung
-            jawab Anda.
+            Anda. Segala aktivitas yang terjadi melalui akun Anda menjadi
+            tanggung jawab Anda.
           </li>
           <li>
-            Anda dilarang menggunakan aplikasi untuk tujuan yang melanggar hukum,
-            etika, atau yang merugikan pihak lain.
+            Anda dilarang menggunakan aplikasi untuk tujuan yang melanggar
+            hukum, etika, atau yang merugikan pihak lain.
           </li>
         </ul>
 
         <h6 className="font-medium mb-1">2.2. Hak Kekayaan Intelektual</h6>
         <p className="mb-3">
           Seluruh konten, desain, logo, dan fitur dalam aplikasi Griyata by BNI
-          dilindungi oleh hak cipta dan kekayaan intelektual milik PT Bank Negara
-          Indonesia (Persero) Tbk. Anda tidak diperkenankan untuk menyalin,
-          memodifikasi, atau mendistribusikan tanpa izin tertulis dari kami.
+          dilindungi oleh hak cipta dan kekayaan intelektual milik PT Bank
+          Negara Indonesia (Persero) Tbk. Anda tidak diperkenankan untuk
+          menyalin, memodifikasi, atau mendistribusikan tanpa izin tertulis dari
+          kami.
         </p>
 
         <h6 className="font-medium mb-1">2.3. Batasan Tanggung Jawab</h6>
@@ -172,15 +175,15 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({
         <h5 className="font-semibold text-gray-700 mb-2">3. KETENTUAN UMUM</h5>
         <h6 className="font-medium mb-1">3.1. Pembaruan Kebijakan</h6>
         <p className="mb-3">
-          Kami berhak untuk mengubah atau memperbarui kebijakan ini sewaktu-waktu.
-          Setiap perubahan akan diinformasikan melalui notifikasi di aplikasi atau
-          situs web resmi BNI.
+          Kami berhak untuk mengubah atau memperbarui kebijakan ini
+          sewaktu-waktu. Setiap perubahan akan diinformasikan melalui notifikasi
+          di aplikasi atau situs web resmi BNI.
         </p>
 
         <h6 className="font-medium mb-1">3.2. Hukum yang Berlaku</h6>
         <p className="mb-3">
-          Kebijakan ini diatur dan ditafsirkan sesuai dengan hukum yang berlaku di
-          Republik Indonesia.
+          Kebijakan ini diatur dan ditafsirkan sesuai dengan hukum yang berlaku
+          di Republik Indonesia.
         </p>
 
         <h6 className="font-medium mb-1">3.3. Kontak Kami</h6>
