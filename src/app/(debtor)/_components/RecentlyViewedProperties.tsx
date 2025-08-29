@@ -52,6 +52,10 @@ export default function RecentlyViewedProperties() {
   const slidesLength = isLoading ? SKELETON_COUNT : properties.length;
   const showArrows = isMobile && slidesLength > 1;
 
+  if (properties?.length === 0) {
+    return <></>;
+  }
+
   return (
     <>
       <section className="space-y-4 mb-10">
