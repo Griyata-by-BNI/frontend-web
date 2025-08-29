@@ -82,15 +82,17 @@ export const AffordabilityResults = ({
             <Col span={24}>
               <Divider className="!mt-2" />
 
-              <Button 
-                type="primary" 
+              <Button
+                type="primary"
                 className="w-full"
-                onClick={() => router.push(`/search?pricemax=${affordablePrice}`)}
+                onClick={() =>
+                  router.push(`/search?priceMax=${affordablePrice}`)
+                }
               >
                 Cari Properti
               </Button>
 
-              <p 
+              <p
                 className="text-sm text-dark-tosca/75 underline text-center mt-4 cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
               >
