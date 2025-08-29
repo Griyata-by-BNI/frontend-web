@@ -27,8 +27,16 @@ export default function KprApplyForm() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const propertyId = searchParams.get("property_id");
-  
-  const { currentStep, next, prev, setCurrentStep, initSession, isValidSession, reset } = useKprApplyStore(
+
+  const {
+    currentStep,
+    next,
+    prev,
+    setCurrentStep,
+    initSession,
+    isValidSession,
+    reset,
+  } = useKprApplyStore(
     useShallow((s) => ({
       currentStep: s.currentStep,
       formData: s.formData,
@@ -40,13 +48,13 @@ export default function KprApplyForm() {
       reset: s.reset,
     }))
   );
-  
+
   useEffect(() => {
     if (!user?.userId || !propertyId) return;
-    
+
     const userId = user.userId;
     const propId = Number(propertyId);
-    
+
     if (!isValidSession(userId, propId)) {
       reset();
       initSession(userId, propId);
@@ -63,7 +71,6 @@ export default function KprApplyForm() {
           items={items}
           current={currentStep}
           className="!hidden md:!flex [&_.ant-steps-item-title]:!leading-6"
-          onChange={setCurrentStep}
         />
 
         <div className="h-20 p-4 bg-gradient-to-r from-primary-tosca to-dark-tosca rounded-lg md:hidden">
