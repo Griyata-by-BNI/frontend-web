@@ -27,7 +27,7 @@ export const KPRAffordability = ({ className = "" }: KPRAffordabilityProps) => {
 
   return (
     <div
-      className={`w-full bg-gradient-to-r pt-5 from-primary-tosca to-primary-purple h-max rounded-xl md:rounded-2xl shadow-lg shadow-gray-500/10 border border-gray-200 ${className}`}
+      className={`w-full bg-gradient-to-r pt-5 from-teal-400 to-dark-tosca h-max rounded-xl md:rounded-2xl shadow-lg shadow-gray-500/10 border border-gray-200 ${className}`}
     >
       <div className="overflow-hidden rounded-xl md:rounded-2xl border border-gray-200">
         <Row

@@ -136,6 +136,7 @@ export default function LoanInformationForm() {
               className="!mb-3 md:!mb-4"
               label="Uang Muka"
               name="downPayment"
+              key={`downpayment-${property?.price ?? "na"}`}
               rules={[
                 { required: true, message: "Uang muka wajib diisi" },
                 ...(minDownPayment
@@ -220,7 +221,7 @@ export default function LoanInformationForm() {
                 placeholder="Masukkan tenor peminjaman"
                 suffix={<p className="font-semibold text-dark-tosca">bulan</p>}
                 min={getMinTenorFromInterestRate()}
-                max={300}
+                max={360}
               />
             </Form.Item>
           </Col>

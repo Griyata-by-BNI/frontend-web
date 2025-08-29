@@ -51,7 +51,6 @@ const VerifyEmailPage: React.FC = () => {
           message.success("Email berhasil diverifikasi!");
           setIsVerified(true);
           login(data.data.token);
-          router.push("/");
         },
         onError: (error: any) => {
           const errorMessage =

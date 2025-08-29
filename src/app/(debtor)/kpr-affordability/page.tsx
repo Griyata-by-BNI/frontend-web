@@ -95,12 +95,6 @@ export default function KprAffordabilityPage() {
                 Biaya provisi, administrasi, notaris, asuransi, dan PPN/BPHTB
                 mungkin belum seluruhnya termasuk.
               </p>
-              <Link
-                href="/info/kpr"
-                className="mt-3 inline-flex text-sm font-medium text-teal-700 hover:text-teal-800 underline"
-              >
-                Pelajari komponen biaya →
-              </Link>
             </div>
 
             {/* FAQ Ringkas */}

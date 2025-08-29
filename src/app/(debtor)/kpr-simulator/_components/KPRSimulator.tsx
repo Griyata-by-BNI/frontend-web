@@ -107,7 +107,7 @@ export const KPRSimulator = ({
 
   return (
     <div
-      className={`w-full bg-gradient-to-r ${outerPt} from-primary-tosca to-dark-tosca
+      className={`w-full bg-gradient-to-r ${outerPt} from-teal-400 to-dark-tosca
       h-max ${wrapRadius} ${shadowCls} ${className}`}
     >
       <div className={`overflow-hidden ${innerRadius}`}>
