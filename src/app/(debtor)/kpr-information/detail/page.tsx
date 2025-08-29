@@ -8,12 +8,24 @@ import { InterestRatesData } from "../_types";
 
 const DetailInfoKprPage = () => {
   return (
-    <main className="max-w-5xl mx-auto px-5 mt-4 md:mt-10 mb-10">
-      <RequirementsSection />
+    <main
+      className="
+        mx-auto
+        w-full
+        max-w-screen-lg lg:max-w-screen-xl
+        px-4 sm:px-6 lg:px-8
+        pt-16 md:pt-24
+        pb-8 md:pb-12
+      "
+    >
+      {/* Spasi vertikal adaptif antar section */}
+      <div className="space-y-8 sm:space-y-10 lg:space-y-12">
+        <RequirementsSection />
 
-      <InterestRateSection data={interestRatesData as InterestRatesData} />
+        <InterestRateSection data={interestRatesData as InterestRatesData} />
 
-      <CTASection />
+        <CTASection />
+      </div>
     </main>
   );
 };
