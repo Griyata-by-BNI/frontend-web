@@ -55,29 +55,36 @@ const InfoKprPage: React.FC = () => {
 
   return (
     <div className="bg-gray-100 font-sans">
-      <div className="bg-gradient-to-b from-teal-500 to-teal-600 py-20 text-center mt-[-48px] mb-[-48px]">
-        <h1 className="text-4xl font-bold text-white">Griyata by BNI</h1>
+      {/* Hero: lebih pendek di mobile, negative margin hanya untuk layar besar */}
+      <div className="bg-gradient-to-b from-teal-500 to-teal-600 text-center py-12 sm:py-16 lg:py-20 lg:-mt-12 lg:-mb-12">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
+          Griyata by BNI
+        </h1>
       </div>
 
-      <div className="custom-container">
+      {/* About */}
+      <div className="custom-container px-4 sm:px-6 lg:px-0">
         <AboutSection />
       </div>
 
-      <div className="custom-container !py-0 rounded-2xl overflow-clip mb-10 drop-shadow-lg drop-shadow-gray-500/5 border border-gray-200">
+      {/* Keunggulan + Stats + Jenis Fitur */}
+      <div className="custom-container px-4 sm:px-6 lg:px-0 !py-0 mt-6 sm:mt-8 lg:mt-10 mb-8 sm:mb-10 rounded-2xl overflow-clip border border-gray-200 shadow-lg shadow-gray-500/5">
         <KeunggulanSection />
 
         <StatsSection />
 
-        <div className="bg-white p-6">
+        <div className="bg-white p-4 sm:p-6">
           <JenisFiturSection items={jenisFitur} />
         </div>
       </div>
 
-      <div className="custom-container !py-0">
+      {/* FAQ */}
+      <div className="custom-container px-4 sm:px-6 lg:px-0 !py-0">
         <FaqSection faqData={FAQS} />
       </div>
 
-      <div className="custom-container !py-0 mb-10">
+      {/* Contact */}
+      <div className="custom-container px-4 sm:px-6 lg:px-0 !py-0 mb-8 sm:mb-10">
         <ContactSection />
       </div>
     </div>
