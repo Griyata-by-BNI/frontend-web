@@ -3,7 +3,7 @@
 import { useAuth } from "@/contexts/authContext";
 import { usePropertyById } from "@/services/propertyServices";
 import { axiosInstance } from "@/utils/axios";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { useEffect, useMemo } from "react";
 
 import { useClusterById } from "@/services";
@@ -65,19 +65,7 @@ export default function DetailPropertyPage() {
   }
 
   if (error || !property) {
-    return (
-      <div className="min-h-screen bg-light-tosca flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Properti tidak ditemukan</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 rounded-full bg-teal-600 text-white hover:bg-teal-700 transition"
-          >
-            Coba Lagi
-          </button>
-        </div>
-      </div>
-    );
+    return notFound();
   }
 
   const developerLogo =

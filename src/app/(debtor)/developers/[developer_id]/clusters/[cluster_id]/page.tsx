@@ -3,7 +3,7 @@
 import { useClusterById } from "@/services/clusterServices";
 import { useClusterTypes } from "@/services/clusterTypeServices";
 import { useDetailDeveloper } from "@/services/developerServices";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import formatPrice from "@/utils/formatPrice";
 import StickyCard from "../_components/StickyCard";
 import ClusterHero from "../_components/ClusterHero";
@@ -42,19 +42,7 @@ export default function HousingDetailPage() {
   }
 
   if (clusterError || !clusterDetail || !developer) {
-    return (
-      <div className="min-h-screen py-10 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Gagal memuat data cluster</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 rounded-full bg-teal-600 text-white hover:bg-teal-700 transition"
-          >
-            Coba Lagi
-          </button>
-        </div>
-      </div>
-    );
+    return notFound();
   }
 
   const developerLogo =

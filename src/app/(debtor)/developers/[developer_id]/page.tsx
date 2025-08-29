@@ -1,16 +1,12 @@
 "use client";
 
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { Skeleton } from "antd";
-import { ChevronRight, ArrowLeft, Building2 } from "lucide-react";
-import ClusterSearchWrapper from "./_components/ClusterSearchWrapper";
-import { useDetailDeveloper } from "@/services/developerServices";
-import DeveloperDetailSkeleton from "./_components/DetailDeveloperSkeleton";
-import KprToolsSection from "../../_components/KprToolsSection";
 import { CustomBreadcrumb } from "@/components/CustomBreadcrumb";
+import { useDetailDeveloper } from "@/services/developerServices";
+import Image from "next/image";
+import { notFound, useParams } from "next/navigation";
+import KprToolsSection from "../../_components/KprToolsSection";
+import ClusterSearchWrapper from "./_components/ClusterSearchWrapper";
+import DeveloperDetailSkeleton from "./_components/DetailDeveloperSkeleton";
 
 export default function DeveloperDetailPage() {
   const params = useParams();
@@ -24,25 +20,7 @@ export default function DeveloperDetailPage() {
 
   // ===== Not Found =====
   if (!developerData?.data?.developer) {
-    return (
-      <div className="custom-container min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Developer tidak ditemukan
-          </h1>
-          <p className="text-gray-600">
-            Developer yang Anda cari tidak tersedia.
-          </p>
-          <Link
-            href="/developers"
-            className="inline-flex items-center gap-2 mt-6 px-4 py-2 rounded-full bg-teal-600 text-white font-medium hover:bg-teal-700 transition"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Kembali ke daftar developer
-          </Link>
-        </div>
-      </div>
-    );
+    return notFound();
   }
 
   const developer = developerData.data.developer;
