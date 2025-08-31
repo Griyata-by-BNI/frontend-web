@@ -86,7 +86,9 @@ export const AffordabilityResults = ({
                 type="primary"
                 className="w-full"
                 onClick={() =>
-                  router.push(`/search?priceMax=${affordablePrice}&priceMin=0`)
+                  router.push(
+                    `/search?priceMax=${affordablePrice}&priceMin=0&sortBy=highestPrice`
+                  )
                 }
               >
                 Cari Properti
