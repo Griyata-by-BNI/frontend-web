@@ -51,11 +51,11 @@ export default function PropertySidebar({
           </Link>
 
           {user ? (
+            <FavoriteButton propertyId={property.id} userId={userId} />
+          ) : (
             <Link href="/redirect" className="cursor-pointer">
               <FavoriteButton propertyId={property.id} userId={userId} />
             </Link>
-          ) : (
-            <FavoriteButton propertyId={property.id} userId={userId} />
           )}
         </div>
       </div>
@@ -75,11 +75,11 @@ export default function PropertySidebar({
           </Link>
 
           {user ? (
+            <FavoriteButton propertyId={property.id} userId={userId} />
+          ) : (
             <Link href="/redirect" className="cursor-pointer">
               <FavoriteButton propertyId={property.id} userId={userId} />
             </Link>
-          ) : (
-            <FavoriteButton propertyId={property.id} userId={userId} />
           )}
         </div>
       </div>
